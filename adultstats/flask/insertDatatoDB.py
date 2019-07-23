@@ -1,7 +1,7 @@
 import pandas as pd
 from pymongo import MongoClient
 
-df=pd.read_csv('/home/kedhar/Downloads/adult_dataset.csv',dtype=str)
+df=pd.read_csv('/usr/share/nginx/www/adultstats/adult_dataset.csv',dtype=str)
 client=MongoClient('localhost')['sampleproject']['adultdata']
 for col in df.columns:
     df[col]=df[col].fillna('')
