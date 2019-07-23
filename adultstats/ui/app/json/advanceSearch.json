@@ -1,0 +1,13 @@
+{
+  "string": {
+    "Contains": "df=df[df['column'].fillna('').astype(str).str.contains('value', case = False)]",
+    "StartsWith": "df=df[df['column'].fillna('').astype(str).str.contains('value')]",
+    "EndsWith": "df=df[df['column'].fillna('').astype(str).str.contains('value')]"
+  },
+  "numeric": {
+    "Equal": "df=df[df['column'].fillna(0) == value]",
+    "NotEqual": "df=df[df['column'].fillna(0) != value]",
+    "Greater": "df=df[df['column'].fillna(0) > value]",
+    "Lower": "df=df[df['column'].fillna(0) < value]"
+  }
+}

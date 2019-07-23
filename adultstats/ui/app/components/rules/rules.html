@@ -1,0 +1,243 @@
+<div>
+    <div class="row" ng-show="rules" >
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex">
+                        <div>
+                            <h3 class="card-title"><span class="lstick"></span>Rules List</h3>
+                            <h6 class="card-subtitle">This will get trigger when the <code>conditions</code> are met.</h6>
+                        </div>
+                    </div>
+                    <div class="button-group">
+                        <button type="button" class="btn btn-outline-info" ng-click="addRules()"><i class="fa fa-plus"></i> Add Rule</button>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Source</th>
+                                    <th>Trigger</th>
+                                    <th>Action</th>
+                                    <th>Board</th>
+                                    <th>Space</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="ruledata in rulesData" ng-hide="ruledata.trigger == 'Feedback Room'">
+                                    <td><a ng-click="updateActionRule(ruledata)" href="javascript:;">{{ruledata.source}}</a></td>
+                                    <td>{{ruledata.trigger}}</td>
+                                    <td>{{ruledata.action.name}}</td>
+                                    <td>
+                                        <div ng-if="(ruledata.trigger == 'Ticket Created' || ruledata.trigger == 'Ticket Updated') && ruledata.trigger_board != '' && ruledata.trigger_board != undefind" ng-repeat="board in boards| filter:{'id':  ruledata.trigger_board}:true">
+                                            {{board.name}}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div ng-if="(ruledata.trigger == 'Ticket Created' || ruledata.trigger == 'Ticket Updated') && ruledata.trigger_room != '' && ruledata.trigger_room != undefind" ng-repeat="room in rooms| filter:{'id':  ruledata.trigger_room}:true">
+                                            {{room.title}}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="label label-table label-success">{{ruledata.status}}</div>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn waves-effect waves-light btn-sm btn-secondary" ng-click="removeRule(ruledata)"><i class="fa fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" ng-hide="rules">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex">
+                        <div>
+                            <h4 class="card-title" ng-hide="isUpdateRule"><span class="lstick"></span>Create Rule</h4>
+                            <h4 class="card-title" ng-show="isUpdateRule"><span class="lstick"></span>Update Rule</h4>
+                            <h6 class="card-subtitle">This will get trigger when the <code>conditions</code> are met.</h6>
+                        </div>
+                    </div>
+                    <form class="form-horizontal form-bordered">
+                        <div class="form-body">
+                            <div class="form-group">
+                                <h5>Source</h5>
+                                <div class="controls">
+                                    <select ng-model="rule.source" class="form-control custom-select">
+                                        <option value="">Select Source</option>
+                                        <option value="ConnectWise">ConnectWise</option>
+                                        <!--                                    <option value="Twitter">Twitter</option>-->
+                                        <option value="Spark Space">Spark Space</option>
+                                        <!--<option value="Slack Space">Slack Space</option>-->
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <h5>Trigger</h5>
+                                <div class="">
+                                    <select ng-change="changeTemplate(rule.trigger)"  ng-model="rule.trigger" ng-if="rule.source == 'ConnectWise'" class="form-control custom-select" ng-options="ticketTemplate.id as ticketTemplate.name for ticketTemplate in ticketTemplates| orderBy:'name'">
+<!--                                        <option value="Ticket Created">Ticket Created</option>
+                                        <option value="Ticket Updated">Ticket Updated</option>
+                                        <option value="Ticket Closed">Ticket Closed</option>
+                                        <option value="Activity Created">Activity Created</option>
+                                        <option value="Activity Updated">Activity Updated</option>
+                                        <option value="Activity Closed">Activity Closed</option>
+                                        <option value="Opportunity Created">Opportunity Created</option>
+                                        <option value="Opportunity Updated">Opportunity Updated</option>
+                                        <option value="Opportunity Closed">Opportunity Closed</option>-->
+                                    </select>
+                                    <select ng-model="rule.trigger" ng-if="rule.source == 'Twitter'" class="form-control custom-select">
+                                        <option value="New Tweet">New Tweet</option>
+                                    </select>
+                                    <select ng-model="rule.trigger" ng-if="rule.source == 'Spark Space'" class="form-control custom-select">
+                                        <option value="">Select Trigger</option>
+                                        <option value="New Message">New Message</option>
+                                        <!--                                        <option value="Feedback Room">Feedback Room</option>-->
+                                    </select>
+                                    <select ng-model="rule.trigger" ng-if="rule.source == 'Slack Space'" class="form-control custom-select">
+                                        <option value="New Message">New Message</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group" ng-if="rule.trigger == 'Ticket Updated' || rule.trigger == 'Ticket Created'">
+                                <h5>ConnectWise Board</h5>
+                                <div class="">
+                                    <select ng-model="rule.trigger_board" class="form-control custom-select" ng-options="board.id as board.name for board in boards| orderBy:'name'">
+                                        <option value="">Select Board</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group" ng-if="rule.source == 'ConnectWise'">
+                                <h5>Action</h5>
+                                <div class="">
+                                    <select ng-model="rule.action.name" class="form-control custom-select">
+                                        <option value="">Select Action</option>
+                                        <option value="sparkMessage">Send a Spark Message</option>
+                                        <!--                                    <option value="api">Execute API</option>-->
+                                        <option value="mail">Send a Mail</option>
+                                        <!--                                    <option value="sms">Send a SMS</option>-->
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group" ng-show="rule.action.name == 'mail'">
+                                <h5>Enter Email</h5>
+                                <div class="">
+                                    <input type="email" ng-model="rule.action.email" class="form-control" value="Enter Email Address">
+                                </div>
+                            </div>
+
+                            <div class="row"  ng-show="rule.action.name == 'sparkMessage' || rule.trigger == 'Feedback Room'" >
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <h5>Business Hours Spark Space</h5>
+                                        <div class="">
+                                            <select ng-model="rule.trigger_room" class="form-control custom-select" ng-options="room.id as room.title for room in rooms| orderBy:'title'">
+                                                <option value="">Select Spark Space</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group" ng-show="rule.action.name == 'sparkMessage' || rule.trigger == 'Feedback Room'">
+                                        <h5>On Call Spark Space</h5>
+                                        <div class="">
+                                            <select ng-model="rule.trigger_room_oncall" class="form-control custom-select" ng-options="room.id as room.title for room in rooms| orderBy:'title'">
+                                                <option value="">Select Spark Space</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="form-group" ng-show="rule.action.name == 'sparkMessage' || rule.action.name == 'mail'">
+                                <h5>Send message</h5>
+                                <div class="">
+                                    <textarea ng-model="rule.action.msg" class="form-control" rows="5"></textarea>
+                                </div>
+                                <h5>&nbsp;</h5>
+                                <div class="">
+                                    <div class="alert alert-info"> <i class="fa fa-exclamation-circle"></i> For a user friendly format, please give a space at end of each line. </div>
+                                    <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Markups
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <div class="card">
+                                            <div class="card-body" style="font-size: 0.8rem;">
+
+                                                <h6>Markdown Formats</h6>
+                                                Add special characters around text to apply formatting
+                                                <div class="dropdown-divider"></div>
+                                                <div>
+                                                    <b>**Bold**</b> <br />
+                                                    <i>_Italic_</i> <br />
+                                                    > Blockquote <br />
+                                                </div>
+                                                <div class="dropdown-divider"></div>
+                                                Lists <br />
+                                                1. Item 1 <br />
+                                                2. Item 2 <br />
+                                                3. Item 3 <br />
+                                                * Bullet Point 1 <br />
+                                                * Bullet Point 2 <br />
+                                                <div class="dropdown-divider"></div>
+                                                Headings <br />
+                                                # Heading 1 <br />
+                                                ## Heading 2 <br />
+                                                ### Heading 3 <br />
+                                                <div class="dropdown-divider"></div>
+                                                - - - Horizontal Line <br />
+                                                Links <br />
+                                                [Link Text](link) <br />
+                                                Example <br />
+                                                [Cisco](www.cisco.com) <br />
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="form-group" ng-show="rule.action.name == 'api'">
+                                <h5>Enter API</h5>
+                                <div class="">
+                                    <input type="text" ng-model="rule.action.action" class="form-control" value="Enter API">
+                                </div>
+                            </div>
+
+                            <div class="form-group" ng-show="rule.action.name == 'sms'">
+                                <h5>Enter Phone Number</h5>
+                                <div class="">
+                                    <input type="text" ng-model="rule.action.action" class="form-control" value="Enter Phone Number">
+                                </div>
+                            </div>
+                            <div class=" form-group form-actions">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="">
+                                            <div class="offset-sm-3 ">
+                                                <button type="button" class="btn btn-outline-info" ng-click="saveRules(rule)"><i class="fa fa-save"></i> Save</button>
+                                                <button type="button" ng-click="cancel()" class="btn btn-outline-inverse">Cancel</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>    

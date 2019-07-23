@@ -1,0 +1,38 @@
+
+<div class="modal-header">
+    <!--    <div class="modal-header">
+        <a ng-click="cancel()" data-dismiss="modal" class="close">X</a>
+    </div>
+    <div class="modal-body">
+        <div class="col-md-12">
+           <div class="card wizard-content">
+                <div class="card-body">
+                    
+                </div>
+            </div>
+    
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-link text-uppercase" ng-click="submit()">Ok</button>
+    </div>-->
+    <h4 ng-show="step == '1'" class="card-title">Connectwise Setup</h4>
+    <h6  ng-show="step == '1'" class="card-subtitle"></h6>
+    <h4 ng-show="step == '2'" class="card-title">Spark Bot Setup</h4>
+    <h6  ng-show="step == '2'" class="card-subtitle"></h6>
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">×</button>
+</div>
+<div class="modal-body">
+
+    <div class="row" ng-show="step == '1'">
+        <div class="col-md-12">
+            <div connectwisedirective iswizard="1"></div>
+        </div>
+    </div>
+    <div class="row" ng-show="step == '2'">
+        <div class="col-md-12">
+            <div sparkbot iswizard="1"></div>
+        </div>
+    </div>
+</div>
+

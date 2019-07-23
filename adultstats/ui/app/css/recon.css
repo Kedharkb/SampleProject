@@ -1,0 +1,823 @@
+.side-mini-panel ul.mini-nav li.selected > a, .side-mini-panel ul.mini-nav li .sidebarmenu {
+    /*background: #333942;*/
+    background: #69788e;
+}
+
+.sidebar-menu > li > a {
+    color: #ffffff;
+}
+
+.sidebar-menu .sub-menu > li > a {
+    color: #eaf2ff;
+    padding: 8px 30px;
+}
+
+.sidebar-menu > li > a:hover, .sidebar-menu > li.active > a,
+.sidebar-menu .sub-menu > li > a:hover, .sidebar-menu .sub-menu > li > a.active {
+    color: #95d8f9;
+}
+
+.sidebar-menu > li.active > a, .sidebar-menu > li > a:active {
+    /*background: #3c4c60;*/
+}
+
+.sidebar-menu .sub-menu > li.active > a {
+    /*background: #535f70;*/
+}
+
+.togglediv #togglebtn i {
+    color: #fff;
+}
+
+.right-sidebar {
+    z-index: 9;
+}
+
+.preview-overlay-container {
+    -webkit-border-radius: 2px;
+    border-radius: 2px;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    -webkit-transition: all .25s ease;
+    transition: all .25s ease;
+    background: rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+
+.card-market {
+    margin-left: 30px;
+    margin-right: 25px;
+}
+
+.full-pane {
+    width: 100%;
+}
+
+.card-no-border .db-card, .db-card {
+    -webkit-box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.1);
+}
+
+.db-card .card-body {
+    padding: 1rem;
+
+}
+
+.sm-grid.row {
+    margin-left: -6px;
+    margin-right: -6px;
+}
+
+.sm-grid [class^="col-"] {
+    padding-left: 6px;
+    padding-right: 6px;
+}
+
+table.table.table-noBordered, .table.table-noBordered > tbody > tr > td {
+    border: 0;
+    border-width: 0;
+}
+
+.table > tbody > tr.top-0 > td {
+    padding-top: 0;
+}
+
+.table > tbody > tr.bottom-0 > td {
+    padding-bottom: 0;
+}
+
+table.table.table-bordered tr {
+    /*border: 1px solid #f5f5f5;*/
+}
+
+table.table.table-bordered th, table.table.table-bordered td {
+    border: 0;
+    padding: 8px;
+    border-style: solid;
+    border-width: 1px 1px 1px 1px !important;
+    border-color: #f5f5f5;
+}
+
+table.table.table-bordered thead th, .tr-ng-grid > thead > tr > th {
+    border-style: solid;
+    border-width: 0px 0px 1px 0px !important;
+    cursor: pointer;
+    font-weight: 500;
+    height: 28px;
+    line-height: 18px;
+    position: relative;
+    text-align: left;
+    vertical-align: top;
+    /*background-color: transparent;*/
+    color: #026ccf !important;
+    padding-right: 18px;
+    white-space: nowrap;
+}
+
+table.table.table-bordered .highlightRow td {
+    background: rgba(255, 0, 0, 0.31) !important;
+}
+
+table.table.table-bordered td {
+    /*padding: 6px;*/
+    height: 22px !important;
+    line-height: 22px;
+    background: transparent !important;
+}
+
+table.table.table-bordered tr {
+    height: 22px !important;
+}
+
+table.table.table-bordered tr.cwRowSelect {
+    background: #E7D8B4;
+    padding: 8px;
+}
+
+table.table.table-bordered tr.disableRow {
+    background: #7A7F79;
+    opacity: 0.4;
+}
+
+.table-bordered > thead > tr > th, .table-bordered > tbody > tr > th, .table-bordered > tfoot > tr > th, .table-bordered > thead > tr > td, .table-bordered > tbody > tr > td, .table-bordered > tfoot > tr > td {
+    border-color: #f5f5f5;
+}
+
+.table-striped > tbody > tr:nth-of-type(2n+1) {
+    background-color: #FFF
+}
+
+.table-striped > tbody > tr:nth-of-type(2n) {
+    background-color: #F6F6F6
+}
+
+table tr th .glyphicon-chevron-down:before, table tr th .glyphicon-chevron-up:before {
+    content: normal;
+}
+
+.tr-ng-grid > thead > tr > th.text-left {
+    text-align: left;
+}
+
+.tr-ng-grid > thead > tr > th.text-right {
+    text-align: right;
+}
+
+.tr-ng-grid .tr-ng-column-header .tr-ng-title {
+    padding-top: 0;
+    padding-right: 0px;
+}
+
+.tr-ng-grid .tr-ng-sort .tr-ng-sort-active, .tr-ng-grid .tr-ng-sort .tr-ng-sort-inactive {
+    height: 18px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 0;
+}
+
+.right-toggle-btn, .toggle-btn {
+    font-size: 22px;
+    position: fixed;
+    padding: 6px 8px;;
+    z-index: 10;
+    -webkit-transition: 0.2s ease-in;
+    -o-transition: 0.2s ease-in;
+    transition: 0.2s ease-in;
+    -webkit-animation-duration: 1s;
+    animation-duration: 1s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+    -webkit-animation-name: fadeInRight;
+    animation-name: fadeInRight;
+
+}
+
+.right-toggle-btn {
+    right: 240px;
+    top: 56px;
+}
+
+
+.right-toggle-btn.open {
+    right: 0px;
+}
+
+.toggle-btn.scrollup-btn {
+    bottom: 100px;
+    right: 30px;
+}
+
+.right-toggle-btn .fa, .toggle-btn .fa {
+    float: left;
+    line-height: 18px;
+}
+
+.right-sidebar.collapsed {
+    width: 0px;
+}
+
+.f-w-4 {
+    font-weight: 400;
+}
+
+.f-w-5 {
+    font-weight: 500;
+}
+
+.f-w-6 {
+    font-weight: 600;
+}
+
+.anyClass {
+    /*height: 500px;*/
+    /*width: auto;*/
+    overflow-y: auto;
+}
+
+.anyClass1 {
+    height: 800px;
+    width: 1500px;
+    bottom: 0px;
+
+    overflow-y: auto;
+}
+
+.breadcrumb {
+    background-color: transparent;
+    margin-bottom: 0px;
+}
+
+.login-custom-box.card {
+    width: 400px;
+    top: 0%;
+    margin-top: 0px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+/*!* green theme *!*/
+/*.topbar .navbar-header {*/
+/*background: #56844A;*/
+/*}*/
+/*.side-mini-panel {*/
+/*background: #426D56;*/
+/*}*/
+/*.side-mini-panel ul.mini-nav li.selected > a, .side-mini-panel ul.mini-nav li .sidebarmenu {*/
+/*background: #85b28e;*/
+/*}*/
+/*.side-mini-panel ul.mini-nav > li > a i {*/
+/*color: #FFFFFF;*/
+/*}*/
+/*.sidebar-menu > li > a:hover, .sidebar-menu > li.active > a,*/
+/*.sidebar-menu .sub-menu > li > a:hover, .sidebar-menu .sub-menu > li > a.active {*/
+/*background: transparent;*/
+/*color: #e3fcf2;*/
+/*text-shadow: 0 3px 4px rgba(0,0,0,0.3);*/
+/*}*/
+/*!* green theme ends here *!*/
+.min-card-pane-01 {
+    min-height: calc(100vh - 230px);
+}
+
+.min-card-pane-02 {
+    min-height: calc(100vh - 180px);
+}
+
+.card-no-border .card.card-border, .card.card-border {
+    border: 1px solid #ccc;
+}
+
+.form-group {
+    margin-bottom: 10px;
+}
+
+.select.angular-chosen {
+    display: block !important;
+    position: absolute;
+    clip: rect(0, 0, 0, 0);
+    height: 29px;
+}
+
+.border-red {
+    border: 1px solid red;
+}
+
+.table-responsive {
+    overflow-x: hidden;
+}
+
+.chosen-container-single .chosen-single {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    padding: 3px 2px 0 8px;
+    height: 35px;
+    border: 1px solid #aaa;
+    border-radius: 3px;
+    /* background-color: #fff; */
+    background: none;
+    /* background: -webkit-linear-gradient(#fff 20%,#f6f6f6 50%,#eee 52%,#f4f4f4 100%); */
+    background: -moz-linear-gradient(#fff 20%, #f6f6f6 50%, #eee 52%, #f4f4f4 100%);
+    background: -o-linear-gradient(#fff 20%, #f6f6f6 50%, #eee 52%, #f4f4f4 100%);
+    /* background: linear-gradient(#fff 20%,#f6f6f6 50%,#eee 52%,#f4f4f4 100%); */
+    background-clip: padding-box;
+    box-shadow: 0 0 3px #fff inset, 0 1px 1px rgba(0, 0, 0, .1);
+    color: #444;
+    text-decoration: none;
+    white-space: nowrap;
+    line-height: 24px;
+}
+
+.form-control {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    padding: 3px 2px 0 8px;
+    height: 40px;
+    border: 1px solid #aaa;
+    border-radius: 3px;
+    /* background-color: #fff; */
+    background: #FFFFFF;
+    /* background: -webkit-linear-gradient(#fff 20%,#f6f6f6 50%,#eee 52%,#f4f4f4 100%); */
+    /*background: -moz-linear-gradient(#fff 20%,#f6f6f6 50%,#eee 52%,#f4f4f4 100%);*/
+    /*background: -o-linear-gradient(#fff 20%,#f6f6f6 50%,#eee 52%,#f4f4f4 100%);*/
+    /* background: linear-gradient(#fff 20%,#f6f6f6 50%,#eee 52%,#f4f4f4 100%); */
+    /*background-clip: padding-box;*/
+    /*box-shadow: 0 0 3px #fff inset, 0 1px 1px rgba(0,0,0,.1);*/
+    /*color: #444;*/
+    /*text-decoration: none;*/
+    white-space: nowrap;
+    min-height: 24px;
+    line-height: 24px;
+}
+
+.login-box .form-control, .login-custom-box .form-control {
+    min-height: 34px;
+}
+
+.form-control-sm {
+}
+
+.thead {
+    background: #eaeaea;
+}
+
+.dd {
+    position: relative;
+    display: block;
+    margin: 0;
+    padding: 0;
+    max-width: 600px;
+    list-style: none;
+    font-size: 13px;
+    line-height: 20px;
+}
+
+.dd-list {
+    display: block;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.dd-item, .dd-empty, .dd-placeholder {
+    display: block;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    min-height: 20px;
+    font-size: 13px;
+    line-height: 20px;
+}
+
+.myadmin-dd .dd-list .dd-item .dd-handle {
+    background: #ffffff;
+    border: 1px solid rgba(120, 130, 140, 0.13);
+    padding: 8px 16px;
+    height: auto;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 400;
+    border-radius: 0;
+}
+
+.dd-item > button {
+    display: block;
+    position: relative;
+    cursor: pointer;
+    float: left;
+    width: 25px;
+    height: 20px;
+    margin: 5px 0;
+    padding: 0;
+    text-indent: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    border: 0;
+    background: transparent;
+    font-size: 12px;
+    line-height: 1;
+    text-align: center;
+    font-weight: bold;
+}
+
+.dd-list .dd-list {
+    padding-left: 30px;
+}
+
+.dd-item > button {
+    display: block;
+    position: relative;
+    cursor: pointer;
+    float: left;
+    width: 25px;
+    height: 20px;
+    margin: 5px 0;
+    padding: 0;
+    text-indent: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    border: 0;
+    background: transparent;
+    font-size: 12px;
+    line-height: 1;
+    text-align: center;
+    font-weight: bold;
+}
+
+.form-group-filter {
+    margin-bottom: 0px;
+    height: 35px;
+}
+
+.pad-0 {
+    padding: 0;
+}
+
+.topbar .top-navbar .navbar-header .navbar-brand .light-logo {
+    width: auto;
+    height: 40px;
+}
+
+.text-left-center {
+    text-align: center !important;
+}
+
+.menu-title {
+    padding: 6px 26px 6px 16px;
+}
+
+.togglediv {
+    left: 250px;
+}
+
+.tr-ng-grid-footer.form-inline [ng-switch-default] {
+    flex: auto;
+}
+
+.pagination > li > a, .pagination > li > span {
+    position: relative;
+    float: left;
+    padding: 8px 12px;
+    line-height: 1.42857143;
+    text-decoration: none;
+    color: #333;
+    background-color: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.4);
+    margin-left: -1px;
+}
+
+.pagination > .active > a, .pagination > .active > span, .pagination > .active > a:hover, .pagination > .active > span:hover, .pagination > .active > a:focus, .pagination > .active > span:focus {
+    color: #FFFFFF;
+}
+
+.form-control-select {
+    height: 34px;
+}
+
+hr {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    border: 0;
+    border-top: 2px solid rgba(0, 0, 0, .1);
+}
+
+.any-xclass {
+    overflow-x: auto;
+}
+
+.headcol {
+    position: absolute;
+    width: 5em;
+    left: 0;
+    top: auto;
+    border-right: 0px none black;
+    border-top-width: 3px; /*only relevant for first row*/
+    margin-top: -3px; /*compensate for top border*/
+}
+
+.td1, .th1 {
+    margin: 0;
+    border: 3px solid grey;
+    border-top-width: 0px;
+    white-space: nowrap;
+}
+
+.fine {
+    overflow-x: scroll;
+    overflow-y: visible;
+    padding-bottom: 1px;
+}
+
+.bottom-sidebar {
+    position: fixed;
+    bottom: 0px;
+    /*min-width:73%;*/
+    margin-left: 10px;
+    /*width: auto;*/
+    /*z-index: 1100;*/
+    background: #ffffff;
+    /*top: 0px;*/
+    /*padding-bottom: 20px;*/
+    /*height: 100%;*/
+    -webkit-box-shadow: 5px 1px 40px rgba(0, 0, 0, 0.1);
+    box-shadow: 5px 1px 40px rgba(0, 0, 0, 0.1);
+    /*-webkit-transition: all 0.3s ease;*/
+    /*-o-transition: all 0.3s ease;*/
+    /*transition: all 0.3s ease;*/
+    /*overflow-y: auto;*/
+}
+
+/*
+Template Name: Monster Admin
+Author: Themedesigner
+Email: niravjoshi87@gmail.com
+File: css
+*/
+.ulClass {
+    list-style-type: NONE;
+}
+
+/*.sidebarmenu:hover, div.sidebarmenu.expanded {*/
+/*width: 250px;*/
+/*overflow: visible;*/
+/*}*/
+.modal-dialog.modal-md {
+    max-width: 500px;
+}
+
+ul[dnd-list] {
+    min-height: 42px;
+    max-height: 350px;
+    padding-left: 0px;
+}
+
+/**
+ * The dndDraggingSource class will be applied to
+ * the source element of a drag operation. It makes
+ * sense to hide it to give the user the feeling
+ * that he's actually moving it.
+ */
+ul[dnd-list] .dndDraggingSource {
+    display: none;
+}
+
+/**
+ * An element with .dndPlaceholder class will be
+ * added to the dnd-list while the user is dragging
+ * over it.
+ */
+ul[dnd-list] .dndPlaceholder {
+    background-color: #ddd;
+    display: block;
+    min-height: 42px;
+}
+
+ul[dnd-list] li {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-top-right-radius: 4px;
+    border-top-left-radius: 4px;
+    display: block;
+    padding: 10px 15px;
+    margin-bottom: -1px;
+}
+
+/**
+ * Show selected elements in green
+ */
+ul[dnd-list] li.selected {
+    background-color: #dff0d8;
+    color: #3c763d;
+}
+
+.container {
+    position: relative;
+}
+
+.padding-answer-line-mapping {
+    padding-bottom: 8px;
+}
+
+.answer-container {
+    width: 40px;
+    height: 40px;
+    background-color: #ccc;
+    border: 1px solid #ccc;
+    margin: 2px;
+    float: left;
+    text-align: center;
+    padding-top: 8px;
+    cursor: pointer;
+    position: relative;
+}
+
+.answer-container:hover, .answer-container:focus, .answer-container:active {
+    background-color: #0076e9;
+    color: white;
+    border: 1px solid #0076e9;
+}
+
+.round-pointer-right {
+    position: absolute;
+    background-color: #ccc;
+    cursor: pointer;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    right: 0px;
+    top: 14px;
+    margin-right: -20px;
+}
+
+.round-pointer-left {
+    position: absolute;
+    background-color: #ccc;
+    cursor: pointer;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    left: 0px;
+    top: 14px;
+    margin-left: -20px;
+}
+
+.link_line {
+    stroke: #888;
+    stroke-width: 3;
+    fill: none;
+    pointer-events: none
+}
+
+.link_link {
+    stroke-width: 2;
+    stroke-dasharray: 10, 5;
+    stroke: #ccc;
+    fill: none;
+    stroke-dasharray: 15, 2;
+    pointer-events: none
+}
+
+.link_port {
+    fill: #fff;
+    stroke: #ccc;
+    stroke-width: 1
+}
+
+.link_group_active .link_port {
+    stroke: #ff7f0e
+}
+
+.link_group:hover {
+    cursor: pointer
+}
+
+.link_subflow {
+    stroke: #bbb;
+    stroke-dasharray: 10, 5;
+    stroke-width: 2
+}
+
+.link_outline {
+    stroke: #fff;
+    stroke-width: 4;
+    cursor: crosshair;
+    fill: none;
+    pointer-events: none
+}
+
+.link_background {
+    stroke: #fff;
+    opacity: 0;
+    stroke-width: 20;
+    cursor: crosshair;
+    fill: none
+}
+
+.link_splice > .link_line {
+    stroke-dasharray: 15, 8
+}
+
+g.link_selected path.link_line {
+    stroke: #ff7f0e
+}
+
+g.link_unknown path.link_line {
+    stroke: red;
+    stroke-width: 2;
+    stroke-dasharray: 10, 4
+}
+
+.port {
+    stroke: #999;
+    stroke-width: 1;
+    fill: #ddd;
+    cursor: crosshair;
+}
+
+element.style {
+    fill: rgb(236, 235, 251);
+}
+
+.drag_line {
+    stroke: #ff7f0e;
+    stroke-width: 3;
+    fill: none;
+    pointer-events: none
+}
+
+.drag_line_hidden {
+    stroke: #ff7f0e;
+    stroke-width: 0;
+    pointer-events: none;
+    fill: none
+}
+
+.port_hovered {
+    stroke: #ff7f0e;
+    fill: #ff7f0e
+}
+
+.port_quick_link {
+    stroke: #ff7f0e;
+    fill: #ff7f0e
+}
+
+
+.red-ui-tabs.red-ui-tabs-add.red-ui-tabs-scrollable {
+    padding-right: 59px;
+}
+
+.red-ui-tabs .red-ui-tabs-scroll-container {
+    height: 60px;
+    overflow-x: scroll;
+    overflow-y: hidden;
+}
+
+.red-ui-tabs ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: block;
+    height: 35px;
+    box-sizing: border-box;
+    border-bottom: 1px solid #bbb;
+    white-space: nowrap;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.red-ui-tabs ul li {
+    box-sizing: border-box;
+    display: inline-block;
+    border-left: 1px solid #bbb;
+    border-top: 1px solid #bbb;
+    border-right: 1px solid #bbb;
+    border-bottom: 1px solid #bbb;
+    background: #f0f0f0;
+    margin: 3px 3px 0 3px;
+    height: 32px;
+    line-height: 29px;
+    max-width: 200px;
+    width: 14%;
+    overflow: hidden;
+    white-space: nowrap;
+    position: relative;
+}
+
+.profile-tab li a.nav-link.active, .customtab li a.nav-link.active {
+    background: #d3e7f5;
+}
+
+li.nav-item {
+    font-size: 20px;
+}

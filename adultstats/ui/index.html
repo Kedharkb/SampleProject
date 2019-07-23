@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="nextGen">
+
+<head>
+    <meta charset="utf-8">
+    <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <!-- Tell the browser to be responsive to screen width -->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- Favicon icon -->
+    <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon.png">
+    <title>Adult Stats</title>
+    <link href="/assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/plugins/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet">
+    <link href="app/css/main.css" rel="stylesheet">
+    <link href="/assets/plugins/c3-master/c3.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+
+    <link href="/css/style.css" rel="stylesheet">
+    <!-- Dashboard 1 Page CSS -->
+    <link href="/css/pages/dashboard3.css" rel="stylesheet">
+    <!-- You can change the theme colors from here -->
+    <link href="/css/colors/default-dark.css" id="theme" rel="stylesheet">
+    <link href="/assets/plugins/wizard/steps.css" rel="stylesheet">
+    <link href="/app/css/pages/form-icheck.css" rel="stylesheet">
+    <link href="/main/css/pages/icheck_all.css" rel="stylesheet">
+    <!--<link href="/ui/css/pages/form-pages.css" rel="stylesheet"z>-->
+
+    <link href="/app/css/recon.css" rel="stylesheet">
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--&lt;!&ndash;[if lt IE 9]>-->
+    <!--<script> var __basePath = ''; </script>-->
+    <!--<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>-->
+    <!--<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>-->
+    <!--<![endif]&ndash;&gt;-->
+</head>
+
+<body class="fix-header fix-sidebar card-no-border">
+<!-- ============================================================== -->
+<!-- ============================================================== -->
+<!-- Preloader - style you can find in spinners.css -->
+<!-- ============================================================== -->
+<div class="preloader">
+    <div class="loader">
+        <div class="loader__figure"></div>
+        <p class="loader__label">Adult Stats</p>
+    </div>
+</div>
+
+<!-- ============================================================== -->
+<!-- Main wrapper - style you can find in pages.scss -->
+<!-- ============================================================== -->
+<div ng-view ng-cloak ng-if="!isauthenticated"></div>
+<div id="main-wrapper" ng-show="isauthenticated">
+    <!-- ============================================================== -->
+    <!-- Topbar header - style you can find in pages.scss -->
+    <!-- ============================================================== -->
+
+    <header class="topbar">
+        <nav class="navbar top-navbar navbar-expand-md navbar-light">
+            <!-- ============================================================== -->
+            <!-- Logo -->
+            <!-- ============================================================== -->
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">
+                    <!-- Logo icon --><b>
+                    <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
+                    <!-- Dark Logo icon -->
+                    <img src="/assets/images/logo-icon.png" alt="homepage" class="dark-logo"/>
+                    <!-- Light Logo icon -->
+                        <img src="/assets/images/logo-light-icon.png" alt="homepage" class="light-logo"/>
+                </b>
+                    <!--End Logo icon -->
+                    <!-- Logo text --><span>
+                         <!-- dark Logo text -->
+                         <img src="/assets/images/logo-text.png" alt="homepage" class="dark-logo"/>
+                    <!-- Light Logo text -->
+                         <img src="/assets/images/logo-light-icon.png" class="light-logo" alt="homepage"/></span> </a>
+            </div>
+            <!-- ============================================================== -->
+            <!-- End Logo -->
+            <!-- ============================================================== -->
+            <div class="navbar-collapse">
+                <!-- ============================================================== -->
+                <!-- toggle and nav items -->
+                <!-- ============================================================== -->
+                <ul class="navbar-nav mr-auto">
+
+                </ul>
+                <!-- ============================================================== -->
+                <!-- User profile and search -->
+                <!-- ============================================================== -->
+
+            </div>
+        </nav>
+    </header>
+    <!-- ============================================================== -->
+    <!-- End Topbar header -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- Left Sidebar - style you can find in sidebar.scss  -->
+    <!-- ============================================================== -->
+    <div class="side-mini-panel">
+        <ul class="mini-nav">
+            <div class="togglediv">
+                <a href="javascript:void(0)" id="togglebtn"><i class="ti-menu"></i></a>
+            </div>
+            <li  class="" ng-class="(path=='/dashboard')?'selected':''" ng-click="path = '/dashboard'">
+                <a href="/dashboard"><i class="mdi mdi-gauge" data-toggle="tooltip" data-placement="right" title data-original-title="Dashboard"></i></a>
+                <div class="sidebarmenu">
+                    <h3 class="menu-title">{{resources.dashboard}}</h3>
+                    <ul class="sidebar-menu">
+                        <li>
+                            <a href="/dashboard" ng-class="(summaryDash=='false')?'active':''" ng-click="relationship=false;sexDistribution=true">Sex Distribution Graph</a>
+                        </li>
+                        <li>
+                            <a href="/dashboard" ng-class="(summaryDash=='false')?'active':''" ng-click="sexDistribution=false;relationship=true">Relationship status Graph</a>
+                        </li>
+                        <!--<li>-->
+                            <!--<a href="/dashboard" ng-class="(summaryDash =='true')?'active':''" ng-click="summaryDash=true">summary DashBoard</a>-->
+                        <!--</li>-->
+                    </ul>
+                </div>
+            </li>
+
+            <li  class="" ng-class="(path=='/recons')?'selected':''"><a href="javascript:void(0)" ng-click="path = '/recons'"><i
+                    class="mdi mdi-bullseye" data-toggle="tooltip" data-placement="right" title data-original-title="AdultData"></i></a>
+                <div class="sidebarmenu">
+                    <h3 class="menu-title">{{resources.recons}}</h3>
+                    <ul class="sidebar-menu">
+
+                        <li>
+                            <a href="/recons" ng-class="(adultData == 'false')?'active':''"
+                               ng-click="refreshReconView(recon);">Data</a>
+                        </li>
+
+                    </ul>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- End Left Sidebar - style you can find in sidebar.scss  -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- Page wrapper  -->
+    <!-- ============================================================== -->
+    <div class="page-wrapper">
+        <!-- ============================================================== -->
+        <!-- Horizontal navbar and right sidebar toggle -->
+        <!-- ============================================================== -->
+        <div ng-view ng-cloak ng-if="isauthenticated"></div>
+        <!-- ============================================================== -->
+        <!-- End Page wrapper  -->
+        <!-- ============================================================== -->
+    </div>
+    <!-- ============================================================== -->
+    <!-- End Page wrapper  -->
+    <!-- ============================================================== -->
+</div>
+<!-- ============================================================== -->
+<!-- End Wrapper -->
+
+<!-- ============================================================== -->
+<!-- ============================================================== -->
+<!-- All Jquery -->
+<!-- ============================================================== -->
+
+
+<script src="/assets/plugins/jquery/jquery.min.js"></script>
+<script src="/js/jquery-ui.min.js"></script>
+
+
+<script type="text/javascript" src="/assets/js/angular.min.js"></script>
+<script src="/js/angular-ui.min.js"></script>
+<script type="text/javascript" src="/assets/js/angular-route.min.js"></script>
+<script type="text/javascript" src="/assets/js/ui-bootstrap-tpls-2.5.0.min.js"></script>
+
+
+<script type="text/javascript" src="/assets/js/angular-sanitize.min.js"></script>
+<script type="text/javascript" src="/assets/js/angular-animate.min.js"></script>
+
+
+
+<script type="text/javascript" src="/js/angular-file-upload.js"></script>
+
+<script type="text/javascript" src="/agGrid/ag-grid.min.js"></script>
+<script type="text/javascript" src="/agGrid/ag-grid-enterprise.js"></script>
+<script type="text/javascript" src="/agGrid/ag-grid-enterprise.min.js"></script>
+
+
+<!-- Bootstrap popper Core JavaScript -->
+<script src="/assets/plugins/bootstrap/js/popper.min.js"></script>
+<script src="/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+<script src="/assets/plugins/bootStrap-multiselect/angular-bootstrap-multiselect.min.js"></script>
+
+
+<script src="/assets/plugins/ui-select/select.js"></script>
+<script src="/assets/plugins/ui-select/angular-sanitize.js"></script>
+<!-- slimscrollbar scrollbar JavaScript -->
+<script src="/js/perfect-scrollbar.jquery.min.js"></script>
+<!--Wave Effects -->
+<script src="/js/waves.js"></script>
+<!--Menu sidebar -->
+<script src="/js/sidebarmenu.js"></script>
+<!--Custom JavaScript -->
+<script src="/js/custom.min.js"></script>
+<script src="/js/sidebar.min.js"></script>
+
+<script type="text/javascript" src="/js/angular-idle.min.js"></script>
+
+
+
+<script src="/js/Chart.js"></script>
+<script src="/js/angular-chart.js"></script>
+
+
+
+
+<script type="text/javascript" src="/app/js/app.js"></script>
+<script type="text/javascript" src="/app/js/app.filters.js"></script>
+<script type="text/javascript" src="/app/js/dashboard.js"></script>
+<script type="text/javascript" src="/app/js/recons.js"></script>
+
+
+</body>
+
+</html>

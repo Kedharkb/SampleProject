@@ -1,0 +1,59 @@
+li.as-sortable-placeholder {
+    list-style: none;
+}
+
+.well .list-group {
+    min-height: 2em;
+}
+
+.m-b-zero {
+    margin-bottom: 0;
+}
+
+
+tbody.as-sortable-drag {
+    display: table;
+    border:1px solid #eee;
+    box-shadow: 0 0 5px 0px #ccc;
+    background-color: #fff;
+}
+
+tbody > .as-sortable-placeholder {
+
+    display: table-row;
+}
+
+.as-sortable-placeholder {
+
+    display: table-row;
+}
+
+tr.lastMovedItem td,
+.lastMovedItem {
+    -webkit-animation: backgroundTransform 0.4s;
+    animation: backgroundTransform 0.4s;
+}
+/*
+@-webkit-keyframes backgroundTransform{
+    from{        
+    }
+    to{
+        background-color: #def;
+    }
+}*/
+
+@-webkit-keyframes backgroundTransform{
+    50%{
+        background-color: #def;
+    }
+}
+
+@keyframes backgroundTransform {
+    50%{
+        background-color: #def;
+    }
+}
+
+tr.as-sortable-item {
+  display:table-row;
+}

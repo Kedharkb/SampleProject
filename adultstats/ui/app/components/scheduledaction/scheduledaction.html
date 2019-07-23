@@ -1,0 +1,124 @@
+<div>
+    <div class="row" ng-show="schedules">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex">
+                        <div>
+                            <h3 class="card-title"><span class="lstick"></span>Scheduled Actions List</h3>
+                        </div>
+                    </div>
+                    <div class="button-group">
+                        <button type="button" class="btn btn-outline-info" ng-click="addSchedules()"><i class="fa fa-plus"></i> Add Schedule</button>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Type</th>
+                                    <th>Start Time</th>
+                                    <th>End Time</th>
+                                    <th>Run Every</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="schedule in schedulesData">
+                                    <td><a href="javascript:void(0)" ng-click="updateActionSchedule(schedule)">{{schedule.name}}</a></td>
+                                    <td>{{schedule.type}}</td>
+                                    <td>{{schedule.starttime}}</td>
+                                    <td>{{schedule.endtime}}</td>
+                                    <td><span class="text-muted"><i class="fa fa-clock-o"></i> {{schedule.runevery.hour}}:{{schedule.runevery.minute}}</span> </td>
+                                    <td>
+                                        <button type="button" class="btn waves-effect waves-light btn-sm btn-secondary" ng-click="removeSchedule(schedule)"><i class="fa fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" ng-hide="schedules">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex">
+                        <div>
+                            <h3 class="card-title"><span class="lstick"></span>Create Schedule</h3>
+                        </div>
+                    </div>
+                    <form class="form-horizontal form-bordered">
+                        <div class="form-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group " >
+                                        <label class="col-form-label">Name <span class="text-danger">*</span></label>
+                                        <div class="">
+                                            <input type="text" class="form-control" ng-model="schedule.name" placeholder="Name">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group " >
+                                        <label class="col-form-label">Schedule Type<span class="text-danger">*</span></label>
+                                        <div class="">
+                                            <select ng-model="schedule.type" class="form-control custom-select" ng-options="scheduleType.id as scheduleType.name for scheduleType in scheduleTypes">
+                                                <option value="">Select Charge Type</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group " >
+                                        <label class="col-form-label">Start Time<span class="text-danger">*</span></label>
+                                        <div class="">
+                                            <select ng-model="schedule.starttime" ng-options="item.value as item.label for item in times" class="form-control custom-select">
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--                        <div class="form-group row">
+                                                       <label class="control-label text-right col-md-3">End Time</label>
+                                                       <div class="col-md-9">
+                                                           <select ng-model="schedule.endtime" ng-options="item.value as item.label for item in times" class="form-control custom-select">
+                                                           </select>
+                                                       </div>
+                                                   </div>
+                                                   <div class="form-group row">
+                                                       <label class="control-label text-right col-md-3">Run Every</label>
+                                                       <div class="col-md-3">
+                                                           <select ng-model="schedule.runevery.hour" ng-options="item.value as item.label for item in times" class="form-control custom-select">
+                                                           </select>
+                                                       </div>
+                                                       <div class="col-md-3">
+                                                           <select ng-model="schedule.runevery.minute" ng-options="item.value as item.label for item in minutes" class="form-control custom-select">
+                                                           </select>
+                                                       </div>
+                                                   </div>-->
+                        </div>
+                        <div class="form-actions">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="offset-sm-3 col-md-9">
+                                            <button type="button" class="btn btn-outline-info" ng-click="saveSchedules(schedule)"><i class="fa fa-save"></i> Save</button>
+                                            <button type="button" ng-click="cancel()" class="btn btn-outline-inverse">Cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>    

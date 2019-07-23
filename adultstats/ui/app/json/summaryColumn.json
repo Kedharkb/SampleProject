@@ -1,0 +1,29 @@
+{
+  "loadTypes": [
+    "CSV",
+    "Excel",
+    "HTML",
+    "FixedFormat",
+    "NPCILoader",
+    "FixedHeader",
+    "SFMSMultiSheet",
+    "XML"
+  ],
+  "columnTypes":[{
+      "keyCol": "DR/CR",
+      "selOption": "singleSelect"
+    },
+    {
+      "keyCol": "Amount",
+      "selOption": "multiSelect"
+    },
+    {
+      "keyCol": "GroupBy",
+      "selOption": "multiSelect"
+    }
+  ],
+   "delimiters": {
+    "Pipe": "|",
+    "Comma": ","
+  }
+}

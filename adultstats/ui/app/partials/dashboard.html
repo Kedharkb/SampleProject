@@ -1,0 +1,29 @@
+<div class="card  container col-md-8 m-t-30" ng-show="sexDistribution">
+    <div class="card-header">
+        <h4>Sex Stats</h4>
+    </div>
+    <div class="card-body">
+        <div>
+
+            <canvas id="pie1" class="chart chart-pie"
+                    chart-data="sexGraph['counts']" chart-labels="sexGraph['sex']" chart-options="options">
+            </canvas>
+        </div>
+
+    </div>
+</div>
+
+<div class="card container col-md-8 m-t-30" ng-show="relationship">
+    <div class="card-header">
+        <h4>Relationship Stats</h4>
+    </div>
+    <div class="card-body">
+        <div >
+            <canvas id="bar" class="chart chart-bar"
+                    chart-data="relationGraph['counts']" chart-labels="relationGraph['relationship']">
+            </canvas>
+        </div>
+
+    </div>
+</div>
+

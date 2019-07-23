@@ -1,0 +1,38 @@
+<form class="cwModalPopUp">
+    <div class="modal-body">
+        <div class="cw-loading" id="cw-loading">
+            <div class="cw-loading-image cw-loading-spinner">
+                <div class="cw-loading-spinner-child cw-loading-spinner1"></div>
+                <div class="cw-loading-spinner-child cw-loading-spinner2"></div>
+                <div class="cw-loading-spinner-child cw-loading-spinner3"></div>
+                <div class="cw-loading-spinner-child cw-loading-spinner4"></div>
+                <div class="cw-loading-spinner-child cw-loading-spinner5"></div>
+                <div class="cw-loading-spinner-child cw-loading-spinner6"></div>
+                <div class="cw-loading-spinner-child cw-loading-spinner7"></div>
+                <div class="cw-loading-spinner-child cw-loading-spinner8"></div>
+                <div class="cw-loading-spinner-child cw-loading-spinner9"></div>
+                <div class="cw-loading-spinner-child cw-loading-spinner10"></div>
+                <div class="cw-loading-spinner-child cw-loading-spinner11"></div>
+                <div class="cw-loading-spinner-child cw-loading-spinner12"></div>
+            </div>
+        </div>
+        <p ng-show="isVerifyValidation" >Credential validation in progress. Please wait...</p>
+        <!--<div  class="text-center">-->
+        <!--    <h5 ng-show="isVerifyValidation" >Credential validation in progress. Please wait...</h5>
+                <i class="fa fa-run text-info fa-lg fa-spin"></i>-->
+        <ul class="list-group" ng-show="isVerifyValidation">
+            <li class="list-group-item  text-left clearfix">Checking login into server
+                <span ng-class="{'btn-img img-md status-img status-img-success Action_Approve' :  credentialsValidated == true ,
+                                'btn-img img-md status-img status-img-alert Action_Deny': credentialsValidated == false,
+                                'fa fa-spinner fa-spin': credentialsValidated == 'loading'}" class="pull-right">
+                </span>
+            </li>
+            <li class="list-group-item  text-left clearfix"> Checking for reporting access 
+                <span ng-class="{'btn-img img-md status-img status-img-success Action_Approve' :  isMailboxFullAccess == true ,
+                            'btn-img img-md status-img status-img-alert Action_Deny': isMailboxFullAccess == false,
+                            'fa fa-spinner fa-spin': isMailboxFullAccess == 'loading' }" class="pull-right"></span>
+            </li>
+        </ul>
+        <!--</div>-->
+    </div>
+</form>

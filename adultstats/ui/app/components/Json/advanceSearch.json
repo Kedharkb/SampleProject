@@ -1,0 +1,13 @@
+{
+  "string": {
+    "Contains": "df['$column'].fillna('').astype(str).str.contains('$value', case = False)",
+    "StartsWith": "df['$column'].fillna('').astype(str).str.contains('$value')",
+    "EndsWith": "df['$column'].fillna('').astype(str).str.contains('$value')"
+  },
+  "numeric": {
+    "Equal": "",
+    "NotEqual": "",
+    "Greater": "",
+    "Lower": ""
+  }
+}

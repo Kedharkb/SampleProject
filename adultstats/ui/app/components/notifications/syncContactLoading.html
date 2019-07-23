@@ -1,0 +1,21 @@
+<form class="cwModalPopUp">
+    <div class="modal-body">
+        <div  class="text-center">
+            <p>Please wait...</p>
+            <i class="fa fa-run text-info fa-lg fa-spin"></i>
+            <ul class="list-group">
+                <li class="list-group-item text-left">Waiting For Contact Sync 
+                    <span ng-class="{'btn-img img-md status-img status-img-success Action_Approve' :  contactSync == true ,
+                                'btn-img img-md status-img status-img-alert Action_Deny': contactSync == false,
+                                'fa fa-spinner fa-spin': contactSync == 'loading'}" class="pull-right">
+                    </span>
+                </li>
+                <li class="list-group-item text-left" ng-if="isAgreementFound"> Waiting For Agreements Additions
+                    <span ng-class="{'btn-img img-md status-img status-img-success Action_Approve' :  agreementsSync == true ,
+                            'btn-img img-md status-img status-img-alert Action_Deny': agreementsSync == false,
+                            'fa fa-spinner fa-spin': agreementsSync == 'loading' }" class="pull-right"></span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</form>

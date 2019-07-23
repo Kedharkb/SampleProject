@@ -1,0 +1,42 @@
+<form class="cwModalPopUp">
+    <div class="modal-body">
+        <div class="cw-loading" id="cw-loading">
+            <div class="cw-loading-image cw-loading-spinner">
+                <div class="cw-loading-spinner-child cw-loading-spinner1"></div>
+                <div class="cw-loading-spinner-child cw-loading-spinner2"></div>
+                <div class="cw-loading-spinner-child cw-loading-spinner3"></div>
+                <div class="cw-loading-spinner-child cw-loading-spinner4"></div>
+                <div class="cw-loading-spinner-child cw-loading-spinner5"></div>
+                <div class="cw-loading-spinner-child cw-loading-spinner6"></div>
+                <div class="cw-loading-spinner-child cw-loading-spinner7"></div>
+                <div class="cw-loading-spinner-child cw-loading-spinner8"></div>
+                <div class="cw-loading-spinner-child cw-loading-spinner9"></div>
+                <div class="cw-loading-spinner-child cw-loading-spinner10"></div>
+                <div class="cw-loading-spinner-child cw-loading-spinner11"></div>
+                <div class="cw-loading-spinner-child cw-loading-spinner12"></div>
+            </div>
+        </div>
+        <p>Please wait...</p>
+        <ul class="list-group">
+            <li class="list-group-item text-left clearfix">Password Policy
+                <span ng-class="{'btn-img img-md status-img status-img-success Action_Approve' :  pwdDataLoading == true ,
+                                'btn-img img-md status-img status-img-alert Action_Aborted': pwdDataLoading == false,
+                                'fa fa-spinner fa-spin': pwdDataLoading == 'loading'}" class="pull-right">
+                </span>
+            </li>
+            <li class="list-group-item text-left clearfix">Spam and Malware Filter
+                <span ng-class="{'btn-img img-md status-img status-img-success Action_Approve' :  spamDataLoading == true ,
+                            'btn-img img-md status-img status-img-alert Action_Aborted': spamDataLoading == false,
+                            'fa fa-spinner fa-spin': spamDataLoading == 'loading' }" class="pull-right"></span>
+            </li>
+            <li class="list-group-item text-left clearfix">Retention Policy
+                <span ng-class="{'btn-img img-md status-img status-img-success Action_Approve' :  retentionDataLoading == true ,
+                            'btn-img img-md status-img status-img-alert Action_Aborted': retentionDataLoading == false,
+                            'fa fa-spinner fa-spin': retentionDataLoading == 'loading' }" class="pull-right"></span>
+            </li>
+        </ul>
+    </div>
+    <div class='modal-footer'>
+        <a class='btn btn-link text-uppercase text-white' ng-click="closePolicySettingPopup();">Cancel</a>
+    </div>
+</form>

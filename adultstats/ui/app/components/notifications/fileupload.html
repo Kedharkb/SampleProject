@@ -1,0 +1,21 @@
+<div class="modal-header">
+    <h4 class="card-title">{{title}}</h4>
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">×</button>
+</div>
+<div class="modal-body">
+    <div class="form-group">
+        <!--<label for="urole" class="col-sm-1 col-lg-1 control-label">Upload File:</label>-->
+
+        <div class="col-lg-2" style="margin-top: 10px;margin-right:10px;">
+            <form>
+                <div class="form-row">
+                    <input type="file" file-model="uploadFile" accept=".csv,.jpg,.png,.txt"/>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" ng-click="cancel()" data-dismiss="modal">No</button>
+        <button type="button" class="btn btn-primary" ng-click="upload()">upload</button>
+    </div>
+</div>

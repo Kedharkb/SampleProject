@@ -1,0 +1,159 @@
+.loaderModalPopup {
+}
+.modal.loaderModalPopup .modal-dialog {
+    margin-top: 10%;
+    width: 280px;
+}
+.loaderModalPopup .modal-dialog .modal-content {
+    background: rgba(0, 0, 0, 0.2) none repeat scroll 0 0;
+    border: medium none;
+    border-radius: 10px;
+    box-shadow: none;
+    text-align: center;
+    color:#EEE;
+}
+.tdlinks{
+    cursor: pointer;
+}
+.green{
+    color: green;
+}
+.red{
+    color: red;
+}
+.orange{
+    color: orange;
+}
+.map {
+  height: 700px;
+  width: 100%;
+}
+th{
+    font-weight: bold !important;
+}
+.s-icon{
+        float: right;
+    margin-top: -25%;
+}
+#chartdiv {
+	width	: 100%;
+	height	: 400px;
+}
+.header-title{
+    float: left;
+    color: white;
+    margin-left: 5%;
+    margin-top: 1%;
+    font-size: 26px;
+}
+
+/*Dashboard*/
+
+
+.m-pod {
+  padding: 10px; }
+
+.m-pod-container {
+  background-color: #f8fafb;
+  border: 1px solid #e4e8ec;
+  overflow: hidden;
+  white-space: nowrap;
+  /*box-shadow: 1px 2px 5.94px 0.06px rgba(55, 61, 66, 0.13);*/
+  box-shadow: 0 5px 5px 0 rgba(0,0,0,.25);
+}
+
+.m-pod-container-light {
+  position: absolute;
+  overflow: hidden;
+  white-space: nowrap; }
+
+.m-pod-container::-webkit-scrollbar {
+  all: unset; }
+
+.m-pod-wrapper {
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 100%;
+  background-color: #ffffff; }
+  .m-pod-wrapper::-webkit-scrollbar {
+    width: 0px;
+    /* remove scrollbar space */
+    background: transparent;
+    /* optional: just make scrollbar invisible */ }
+
+.m-pod-title {
+  padding: 10px 10px;
+  margin: 0;
+  text-transform: capitalize;
+  font-size: 14px;
+  line-height: 1.1;
+  color: #4a5259;
+  letter-spacing: 0.010em;
+  border-bottom: 1px solid #e4e8ec;
+  font-weight: 400;
+  font-style: normal;
+  background-color: #ffffff; }
+
+.m-pod h3 {
+  color: #7e858b;
+  font-weight: bold; }
+
+.m-pod-label {
+  padding: 5px 2px;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.005em;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 14px;
+  color: #4a5259; }
+
+.m-pod-spinner-container {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -6px;
+  margin-top: -6px; }
+
+.export .m-pod-container {
+  box-shadow: none !important; }
+
+/**
+ * Get AlienVault Color
+ */
+.m-stat {
+  height: 60px;
+  float: left;
+  padding: 0 0 0 10px;
+  margin: 0 0 10px; }
+  .m-stat h3 {
+    text-transform: uppercase;
+    letter-spacing: 0.005em;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 11px;
+    color: #99a2a9; }
+  .m-stat.clear {
+    clear: left; }
+  .m-stat.border {
+    border-right: 1px solid #dbe0e3; }
+  .m-stat div.clickable {
+    cursor: pointer; }
+  .m-stat h3 {
+    margin-top: 0px;
+    margin-bottom: 0; }
+  .m-stat .current {
+    line-height: 45px;
+    font-size: 45px;
+    font-weight: bold;
+    float: left; }
+  .m-stat .change {
+    float: left;
+    line-height: 16px;
+    font-size: 16px;
+    font-weight: bold;
+    margin: 25px 0 0 5px; }
+  .m-stat.positive .change {
+    color: #6cc221; }
+  .m-stat.negative .change {
+    color: #fd0000; }

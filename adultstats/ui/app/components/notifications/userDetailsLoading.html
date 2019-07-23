@@ -1,0 +1,34 @@
+<form class="cwModalPopUp">
+    <div class="modal-body">
+        <div class="cw-loading" id="cw-loading">
+            <div class="cw-loading-image cw-loading-spinner">
+                <div class="cw-loading-spinner-child cw-loading-spinner1"></div>
+                <div class="cw-loading-spinner-child cw-loading-spinner2"></div>
+                <div class="cw-loading-spinner-child cw-loading-spinner3"></div>
+                <div class="cw-loading-spinner-child cw-loading-spinner4"></div>
+                <div class="cw-loading-spinner-child cw-loading-spinner5"></div>
+                <div class="cw-loading-spinner-child cw-loading-spinner6"></div>
+                <div class="cw-loading-spinner-child cw-loading-spinner7"></div>
+                <div class="cw-loading-spinner-child cw-loading-spinner8"></div>
+                <div class="cw-loading-spinner-child cw-loading-spinner9"></div>
+                <div class="cw-loading-spinner-child cw-loading-spinner10"></div>
+                <div class="cw-loading-spinner-child cw-loading-spinner11"></div>
+                <div class="cw-loading-spinner-child cw-loading-spinner12"></div>
+            </div>
+        </div>
+        <p>Saving Settings. Please wait...</p>
+        <ul class="list-group">
+            <li class="list-group-item text-left clearfix">Saving user details
+                <span ng-class="{'btn-img img-md status-img status-img-success Action_Approve' :  generalDetailValidated == true ,
+                                'btn-img img-md status-img status-img-alert Action_Deny': generalDetailValidated == false,
+                                'fa fa-spinner fa-spin': generalDetailValidated == 'loading'}" class="pull-right">
+                </span>
+            </li>
+            <li class="list-group-item text-left clearfix">Resetting Password
+                <span ng-class="{'btn-img img-md status-img status-img-success Action_Approve' :  resetPwdValidated == true ,
+                            'btn-img img-md status-img status-img-alert Action_Deny': resetPwdValidated == false,
+                            'fa fa-spinner fa-spin': resetPwdValidated == 'loading' }" class="pull-right"></span>
+            </li>
+        </ul>
+    </div>
+</form>

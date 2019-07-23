@@ -1,0 +1,1380 @@
+var app = angular.module("codegen");
+app.directive('ngMetis', ["$timeout", "$state", function ($timeout, $state) {
+    var directive = {
+        restrict: 'A',
+        link: function ($scope, element) {
+            $timeout(function () {
+                $(element).metisMenu().on('shown.metisMenu', function (event) {
+                    var tmpObj = $(event.target).parent('li').children('a')[0];
+                    if (angular.isDefined(tmpObj.getAttribute("goto"))) {
+                        $state.go(tmpObj.getAttribute("goto"))
+                    }
+                });
+            }, 1000);
+        }
+    };
+    return directive;
+}]);
+app.directive('ngEnter', function () {
+    return function (scope, element, attrs) {
+        element.bind("keydown keypress", function (event) {
+            if (event.which === 13) {
+                scope.$apply(function () {
+                    scope.$eval(attrs.ngEnter);
+                });
+                event.preventDefault();
+            }
+        });
+    };
+});
+app.directive('customPopover', function () {
+    return {
+        restrict: 'A',
+        template: '<span><i class="fa fa-info-circle fa-lg text-info form-control-static">{{label}}</i></span>',
+        link: function (scope, el, attrs) {
+            scope.label = attrs.popoverLabel;
+            $(el).each(function () {
+                var $elem = $(this);
+                $elem.popover({
+                    trigger: 'hover',
+                    html: true,
+                    content: attrs.popoverHtml,
+                    placement: attrs.popoverPlacement,
+                    title: attrs.popoverTitle,
+                    animation: true,
+                    container: $elem
+                });
+            });
+        }
+    }
+});
+app.directive('intlTel', function () {
+    return {
+        replace: true,
+        restrict: 'E',
+        require: 'ngModel',
+        template: '<input type="tel" placeholder="+1 702 123 4567">',
+        link: function (scope, element, attrs, ngModel) {
+            var read = function () {
+                var inputValue = element.val();
+                ngModel.$setViewValue(inputValue);
+            }
+            element.intlTelInput();
+            element.on('focus blur keyup change', function () {
+                scope.$apply(read);
+            });
+            read();
+        }
+    }
+});
+
+app.directive('customPopoverGrid', function () {
+    return {
+        restrict: 'A',
+        template: '<span ng-bind-html="label"></span>',
+        link: function (scope, el, attrs) {
+            scope.label = attrs.popoverLabel;
+            $(el).each(function () {
+                var $elem = $(this);
+                $elem.popover({
+                    trigger: 'hover',
+                    html: true,
+                    content: attrs.popoverHtml,
+                    placement: attrs.popoverPlacement,
+                    title: attrs.popoverTitle,
+                    animation: true,
+                    container: $elem
+                });
+            });
+        }
+    };
+});
+app.directive('customFooter', function () {
+    return {
+        restrict: 'A',
+        template: '<span><i class="fa fa-gift fa-lg"></i>{{label}}</span>',
+        link: function (scope, el, attrs) {
+            scope.label = attrs.popoverLabel;
+            $(el).popover({
+                trigger: 'hover',
+                html: true,
+                content: attrs.popoverHtml,
+                placement: attrs.popoverPlacement,
+                title: attrs.popoverTitle
+            });
+        }
+    };
+});
+app.directive('onlyDigits', function () {
+    return {
+        require: 'ngModel',
+        restrict: 'A',
+        link: function (scope, element, attr, ctrl) {
+            function inputValue(val) {
+                if (val) {
+                    val = val + "";
+                    var digits = val.replace(/[^0-9.]/g, '');
+
+                    if (digits !== val) {
+                        ctrl.$setViewValue(digits);
+                        ctrl.$render();
+                    }
+                    return parseFloat(digits);
+                }
+                return undefined;
+            }
+
+            ctrl.$parsers.push(inputValue);
+        }
+    };
+});
+app.directive('mEmails', function () {
+    return {
+        require: 'ngModel',
+        link: function (scope, element, attrs, ctrl) {
+            ctrl.$parsers.unshift(function (viewValue) {
+
+                var emails = viewValue.split(',');
+                // define single email validator here
+                var re = /\S+@\S+\.\S+/;
+
+                // angular.foreach(emails, function() {
+                var validityArr = emails.map(function (str) {
+                    return re.test(str.trim());
+                }); // sample return is [true, true, true, false, false, false]
+                var atLeastOneInvalid = false;
+                angular.forEach(validityArr, function (value) {
+                    if (value === false)
+                        atLeastOneInvalid = true;
+                });
+                if (!atLeastOneInvalid) {
+                    // ^ all I need is to call the angular email checker here, I think.
+                    ctrl.$setValidity('multipleEmails', true);
+                    return viewValue;
+                } else {
+                    ctrl.$setValidity('multipleEmails', false);
+                    return undefined;
+                }
+                // })
+            });
+        }
+    };
+});
+app.directive('multipleEmails', function () {
+    return {
+        require: 'ngModel',
+        link: function (scope, element, attrs, ctrl) {
+            var emailsRegex = /^[\W]*([\w+\-.%]+@[\w\-.]+\.[A-Za-z]{2,4}[\W]*,{1}[\W]*)*([\w+\-.%]+@[\w\-.]+\.[A-Za-z]{2,4})[\W]*$/;
+            ctrl.$parsers.unshift(function (viewValue) {
+                if (emailsRegex.test(viewValue)) {
+                    ctrl.$setValidity('multipleEmails', true);
+                    return viewValue;
+                } else {
+                    ctrl.$setValidity('multipleEmails', false);
+                    return undefined;
+                }
+            });
+        }
+    };
+});
+app.directive('compile', ['$compile', function ($compile) {
+    return function (scope, element, attrs) {
+        var ensureCompileRunsOnce = scope.$watch(
+            function (scope) {
+                // watch the 'compile' expression for changes
+                return scope.$eval(attrs.compile);
+            },
+            function (value) {
+                // when the 'compile' expression changes
+                // assign it into the current DOM
+                element.html(value);
+
+                // compile the new DOM and link it to the current
+                // scope.
+                // NOTE: we only compile .childNodes so that
+                // we don't get into infinite loop compiling ourselves
+                $compile(element.contents())(scope);
+
+                // Use un-watch feature to ensure compilation happens only once.
+                ensureCompileRunsOnce();
+            }
+        );
+    };
+}]);
+app.directive('datagrid', ['$compile', '$rootScope', '$filter', '$timeout',
+    function ($compile, $rootScope, $filter, $timeout) {
+        return {
+            restrict: 'E',
+            scope: {
+                options: "="
+            },
+            //transclude: true,
+            replace: true,
+            link: function (scope, element, attrs) {
+                scope.start = 0;
+                scope.limit = 10;
+                scope.paginationRange = 7;
+                scope.limit = (angular.isDefined(scope.options) && angular.isDefined(scope.options.limit)) ? scope.options.limit : scope.limit;
+                scope.perColConditions = (angular.isDefined(scope.options) && angular.isDefined(scope.options.perColConditions)) ? scope.options.perColConditions : "";
+                scope.sort = (angular.isDefined(scope.options) && angular.isDefined(scope.options.sortField)) ? scope.options.sortField : "";
+                scope.sortName = "";
+                scope.sortNameDirection = 1;
+                scope.sortDirection = (angular.isDefined(scope.options) && angular.isDefined(scope.options.sortBy)) ? scope.options.sortBy : 1;
+                scope.options.reQuery = false;
+                scope.manulasort = true;
+                scope.globalsearch = ""; //all columns search
+                scope.searchFields = {}; //Per column search
+                scope.imgMaps = {}; //key -> data field, val => object containing the imgMap pass from controller
+                scope.options.selectedItems = {};
+                scope.options.nextPage = function () {
+                    scope.nextPage();
+                };
+                scope.options.prevPage = function () {
+                    scope.prevPage();
+                };
+                scope.options.makeSearchEmpty = function () {
+                    scope.searchFields = {};
+                };
+                scope.options.resetPaging = function () {
+                    scope.start = 0;
+                };
+                scope.ptrefresh = function () {
+                    if (angular.isDefined(scope.options.autorefresh) && scope.options.autorefresh > 0) {
+                        scope.tout = $timeout(function () {
+                            scope.doQuery();
+                            scope.ptrefresh();
+                        }, scope.options.autorefresh);
+                    }
+                };
+                scope.drowUi = function () {
+                    //Build the Header and the Body columns (th, td)
+                    var thead = '';
+                    var tbody = '';
+                    var thSearch = '';
+                    var tdArray = [];
+                    var th = '';
+                    var rowStyle = '';
+                    var isCenter = '';
+
+                    var labelColors = ["bg-warning", "bg-info", "bg-primary", "bg-success", "bg-danger", "bg-warning"];
+
+                    angular.forEach(scope.options.headers, function (rowDesc, rowIndex) {
+                        thead += '<tr>';
+                        thSearch += '<tr>';
+                        if (angular.isDefined(scope.options.rowSelect) && scope.options.rowSelect) {
+                            thead += '<th> </th>';
+                            thSearch += '<th> </th>';
+                            tdArray.push('<td><input type="checkbox" ng-model="options.selectedItems[$index]" ng-true-value="{{data}}"></td>');
+                        }
+                        th = '';
+                        var idx = 0;
+                        angular.forEach(rowDesc, function (value, index) {
+                            //idx = idx + 1;
+                            if (angular.isDefined(value.hide) && value.hide == true) {
+                                return;
+                            }
+                            var visibleCol = '';
+                            if (angular.isDefined(value.visibleCol)) {
+                                visibleCol = value.visibleCol;
+                            }
+                            if (angular.isDefined(value.rowStyle)) {
+                                rowStyle = 'background-color : {{data.' + value.rowStyle + ' | rowStyle}}';
+                            }
+                            if (angular.isDefined(value.isCenter)) {
+                                isCenter = 'tdcenter';
+                            }
+                            if (angular.isDefined(value.hide) && value.hide == true) {
+                                return;
+                            }
+                            if (angular.isDefined(value.searchable) && value.searchable && angular.isDefined(value.autoFocus)) {
+
+                                thSearch += '<th class="' + visibleCol + '"><input type="text" class="form-control"  focus-me=true  ng-model="searchFields.' + value.dataField + '" ng-keypress="doSearch($event)"/></th>';
+                            }
+                            else if (angular.isDefined(value.searchable) && value.searchable) {
+                                thSearch += '<th class="' + visibleCol + '"><input type="text" class="form-control"  ng-model="searchFields.' + value.dataField + '" ng-keypress="doSearch($event)"/></th>';
+                            } else if (angular.isDefined(value.selectAll) && value.selectAll) {
+                                var thattr = '';
+                                thattr = (angular.isDefined(value.align) && value.align && angular.isDefined(value.width) && value.width) ? 'style="text-align:' + value.align + '; width:' + value.width + '"' : '';
+
+                                thSearch += '<th class="tdcenter ' + visibleCol + '" ' + thattr + '><input type="checkbox" ng-model="options.selectedAll" ng-click="options.checkAll()" /></th>';
+                            }
+                            //dropdown
+
+                            else if (angular.isDefined(value.dropdown) && value.dropdown) {
+                                value["showVMPage"] = $rootScope.showVMPage;
+                                thSearch += '<th class="' + visibleCol + '"> <select id="dropdown" style="padding-left: 3px;padding-right: 6px;" class="form-control" ng-model="searchFields.' + value.dataField + '" ng-change="doQuery()"><option value="">All</option><!--option value="FileStor">File</option--><!--<option value="DiskStor">Image</option>--><option value="Azure">Azure</option><option value="AWS">AWS</option><option ng-show="' + value.showVMPage + '" value="vmWare">VM</option></select>';
+                                thSearch += '</th>'
+                            }
+
+                            else if (angular.isDefined(value.droplist) && value.droplist) {
+                                thSearch += '<th class="' + visibleCol + '"> <select id="dropdown" style="padding-left: 3px;padding-right: 6px;" class="form-control" ng-model="searchFields.' + value.dataField + '" ng-change="doQuery()"><option value="">All</option><option value="true">Added to backup</option><option value="false">Not added to backup</option></select>';
+                                thSearch += '</th>'
+                            }
+
+                            //dropdown
+
+
+                            else {
+                                thSearch += '<th class="' + visibleCol + '"></th>';
+                            }
+
+                            if (angular.isDefined(value.visible) && value.visible == false) {
+                                //May be the field is defined only for search, not user visible!!!
+                                return;
+                            }
+
+                            //Handle header <th> creation
+
+                            th += '<th ';
+                            attr = (angular.isDefined(value.width) && value.width) ? 'style="width:' + value.width + '"' : '';
+                            if (angular.isDefined(value.sortManual)) {
+                                th += 'class="' + visibleCol + ' sorting" ng-click="sortManualChange(\'' + value.dataField + '\')"';
+                            } else if (angular.isDefined(value.dataField) && value.sortable) {
+                                if (scope.sortDirection == 1 && value.dataField == scope.sort) {
+                                    th += 'class="' + visibleCol + ' sorting_asc" ng-click="sortChange(\'' + value.dataField + '\')"  ' + attr + ' ';
+                                } else if (scope.sortDirection == -1 && value.dataField == scope.sort) {
+                                    th += 'class="' + visibleCol + ' sorting_desc" ng-click="sortChange(\'' + value.dataField + '\')" ' + attr + ' ';
+                                } else {
+                                    th += 'class="' + visibleCol + ' sorting" ng-click="sortChange(\'' + value.dataField + '\')" ' + attr + ' ';
+                                }
+                            } else if (angular.isDefined(value.dataField) && value.sortSchedulerList) {
+                                th += 'class="' + visibleCol + ' sorting" ng-click="sortSchedulerList(\'' + value.dataField + '\')" ' + attr + ' ';
+                            } else if (angular.isDefined(value.datawidth)) {
+                                th += " style='width:" + value.datawidth + "' ";
+                            } else {
+                                th += 'class="' + visibleCol + '" ' + attr + ' ';
+                            }
+                            th += '>' + value.name;
+
+
+                            //Handle body <td> creation
+                            //Sortable header and body
+                            if (!angular.isDefined(value.dataField)) {
+                            } else {
+                                var td = '';
+                                var attr = '';
+                                attr = (angular.isDefined(value.align) && value.align && angular.isDefined(value.width) && value.width) ? 'style="text-align:' + value.align + '; width:' + value.width + '"' : '';
+                                td += '<td class="' + visibleCol + '" ' + attr + ' ';
+                                if (angular.isDefined(value.isHtml) && value.isHtml) {
+                                    td += 'ng-bind-html="\'';
+                                } else {
+                                    td += ">";
+                                }
+                                if (angular.isDefined(value.isLink) && value.isLink) {
+                                    if (angular.isDefined(value.disabledFn)) {
+                                        disableFn = 'ng-class="{linkDisabled: options.' + value.disabledFn + '(data, $index)} "';
+                                    }
+                                    td += '<a class="tdlinks" ng-click="options.edit(data)" ' + disableFn + '>';
+                                    td += '{{data.' + value.dataField;
+                                    td += '}}';
+                                    td += '</a></td>'
+                                }
+                                if (angular.isDefined(value.isPerLink) && value.isPerLink) {
+                                    if (angular.isDefined(value.disabledFn)) {
+                                        disableFn = 'ng-class="{linkDisabled: options.' + value.disabledFn + '(data, $index)} "';
+                                    }
+                                    td += '<a class="tdlinks" ng-click="options.' + value.fnCall + '(data)" ' + disableFn + '>';
+                                    if (angular.isDefined(value.imgMap)) {
+                                        angular.copy(value.imgMap, scope[value.dataField]);
+                                        var title = (angular.isDefined(value.tooltip) && value.tooltip) ? value.dataField : '';
+                                        td += '<img title="{{ data.' + title + ' }}" ng-src="{{ ' + value.dataField + '[data.' + value.dataField + '] }}">';
+                                    } else {
+                                        if (angular.isDefined(value.filter)) {
+                                            td += '{{data.' + value.dataField + ' | ' + value.filter;
+                                        } else {
+                                            td += '{{data.' + value.dataField;
+                                        }
+                                        td += '}}';
+                                    }
+                                    td += '</a></td>'
+                                }
+                                if (angular.isDefined(value.isTdLabel) && value.isTdLabel) {
+                                    var bglabel = "";
+                                    if (angular.isDefined(labelColors[idx])) {
+                                        bglabel = labelColors[idx];
+                                    }
+                                    td += '<span class="label ' + bglabel + '">';
+
+                                    td += '{{data.' + value.dataField;
+
+                                    td += '}}';
+
+                                    td += '</span></td>';
+                                    idx = idx + 1;
+                                }
+
+                                if (angular.isDefined(value.cellbreak) && value.cellbreak) {
+
+
+                                    td += '<span class="break-all">';
+
+                                    td += '{{data.' + value.dataField;
+
+                                    td += '}}';
+
+                                    td += '</span></td>'
+                                }
+
+                                if (angular.isDefined(value.isSelect) && value.isSelect) {
+                                    var tooltip = "";
+                                    var disableFn = "";
+                                    var showHide = "";
+                                    var hvr = "";
+                                    if (angular.isDefined(value.hoverFunction)) {
+                                        hvr = 'ng-mouseover="options.' + value.hoverFunction + '(data, $index)"';
+                                    }
+                                    if (angular.isDefined(value.toolTip)) {
+                                        tooltip = 'tooltip="{{ options.' + value.toolTip + ' }}" ';
+                                    }
+                                    if (angular.isDefined(value.disabledFn)) {
+                                        disableFn = 'ng-disabled="options.' + value.disabledFn + '(data, $index)"';
+                                    }
+                                    if (angular.isDefined(value.showHideFn)) {
+                                        showHide = 'ng-show="options.' + value.showHideFn + '(data, $index)"';
+                                    }
+                                    if (angular.isDefined(value.selectDataField) && value.selectDataField) {
+                                        td += '{{value}}<select ' + hvr + ' ' + showHide + ' ' + disableFn + ' ' + tooltip + ' class="inputTextBox2" ng-change="options.' + value.changeFunction + '(data, $index)" ng-model="data.' + value.dataField + '" ng-options="' + value.selectOptions + ' data.' + value.selectDataField;
+                                        if (angular.isDefined(value.filter)) {
+                                            td += '| ' + value.filter + ": data";
+                                        }
+                                        td += '">';
+                                        td += '<option value="">' + value.optionText + '</option>'
+                                    } else if (angular.isDefined(value.useOptionField) && value.useOptionField) {
+                                        var hvr = "";
+                                        if (angular.isArray(scope.options[value.useOptionField])) {
+                                            if (angular.isDefined(value.hoverFunction)) {
+                                                hvr = 'ng-mouseover="options.' + value.hoverFunction + '(data, $index)"';
+                                            }
+                                            td += '{{value}}<select ' + showHide + ' ' + disableFn + ' ' + tooltip + ' class="inputTextBox2" ng-change="options.' + value.changeFunction + '(data, $index)" ' + hvr + '  ng-model="data.' + value.dataField + '" ng-options="' + value.selectOptions + ' options.' + value.useOptionField;
+                                            if (angular.isDefined(value.filter)) {
+                                                td += '| ' + value.filter + ": data";
+                                            }
+                                            td += '">';
+                                            td += '<option value="">' + value.optionText + '</option>'
+                                        }
+                                    } else {
+                                        scope.options[value.dataField] = value.selectData;
+                                        td += '{{value}}<select ' + hvr + ' ' + showHide + ' ' + disableFn + ' ' + tooltip + ' class="inputTextBox2" ng-change="options.' + value.changeFunction + '(data, $index)" ng-model="data.' + value.dataField + '" ng-options="' + value.selectOptions + ' options.' + value.dataField;
+                                        if (angular.isDefined(value.filter)) {
+                                            td += '| ' + value.filter + ": data";
+                                        }
+                                        td += '">';
+                                        td += '<option value="">' + value.optionText + '</option>'
+                                    }
+                                    td += '</select></td>'
+                                }
+                                if (angular.isDefined(value.isTruncate) && value.isTruncate) {
+                                    td += '<a class="tdlinks" ng-click="options.edit(data)" >';
+                                    td += '{{data.' + value.dataField;
+                                    td += ' | truncate : 100}}';
+                                    td += '</a></td>'
+                                }
+                                if (angular.isDefined(value.isSummaryTruncate) && value.isSummaryTruncate) {
+                                    td += '<a class="tdlinks" ng-click="options.showSummary(data)" >';
+                                    td += '{{data.' + value.dataField;
+                                    td += ' | truncate : 150}}';
+                                    td += '</a></td>'
+                                }
+                                if (angular.isDefined(value.isFormatTimeStamp) && value.isFormatTimeStamp) {
+                                    td += '{{data.' + value.dataField;
+                                    td += ' | formatTimeStamp }}';
+                                    td += '</td>'
+                                }
+                                if (angular.isDefined(value.isImageText) && value.isImageText) {
+
+                                    td += '<span ng-repeat="i in data.' + value.dataField + '" > <span class="name " ng-class="{online:\'online\', busy:\'busy\',offline:\'offline\',idle:\'away\'}[options.hasAcceptedTnC1(i)]" >{{i}} &nbsp;</span></span> ';
+
+                                    td += '</td>'
+                                }
+                                if (angular.isDefined(value.isPopover)) {
+                                    value.isPopover.placement = (value.isPopover.placement == undefined) ? "right" : value.isPopover.placement;
+                                    td += '<a class="tdlinks" popover-template="' + value.isPopover.template + '.html" popover-toggle="data.close"  popover-trigger="manual" ng-click="options.popoveredit(data)" popover-placement="' + value.isPopover.placement + '"  popover-customclass="' + value.isPopover.popclass + '">';
+                                    td += '{{data.' + value.dataField;
+                                    if (angular.isDefined(value.filter)) {
+                                        td += '| ' + value.filter;
+                                    }
+                                    td += '}}';
+                                    td += '</a></td>'
+                                }
+                                if (angular.isDefined(value.iconMap)) {
+                                    td += '<span  class="name ';
+                                    td += '{{data.' + value.dataField;
+                                    if (angular.isDefined(value.filter)) {
+                                        td += '| ' + value.filter + ' | lowercase ';
+                                    }
+                                    td += '}}"';
+                                    td += ' >';
+                                    if (angular.isDefined(value.filter)) {
+                                        td += '&nbsp;<span ng-show="false" ng-bind="data.presence=(data.' + value.dataField + '| ' + value.filter + ' | lowercase)"></span>';
+                                    }
+                                    td += ' </span>';
+                                } else if (angular.isDefined(value.imgMap)) {
+                                    scope[value.dataField] = {};
+                                    angular.copy(value.imgMap, scope[value.dataField]);
+                                    if (angular.isDefined(value.filter)) {
+                                        var title = (angular.isDefined(value.tooltip) && value.tooltip) ? value.dataField + '|' + value.filter : '';
+                                    }
+                                    else {
+                                        var title = (angular.isDefined(value.tooltip) && value.tooltip) ? value.dataField : '';
+                                    }
+                                    td += '<img tooltip="{{ data.' + title + ' }}" ng-src="{{ ' + value.dataField + '[data.' + value.dataField + ']  }}">';
+
+                                    if (angular.isDefined(value.moreImgField) && angular.isDefined(value.moreImg)) {
+                                        scope[value.moreImgField] = {};
+                                        angular.copy(value.moreImg, scope[value.moreImgField]);
+                                        var title = (angular.isDefined(value.moreImgToolTip) && value.moreImgToolTip) ? value.moreImgToolTip : '';
+                                        td += ' &nbsp;&nbsp;<img ng-show="data.' + value.moreImgField + '" tooltip="{{ (data.' + value.dataField + ' == \'Paused\' || data.' + value.dataField + ' == \'ManuallyPaused\') ? \'Resume\' : \'Pause\' }}" ng-src="{{ ' + value.moreImgField + '[data.' + value.dataField + ']  }}"';
+                                        if (angular.isDefined(value.moreImgField)) {
+                                            td += ' style="cursor: pointer;" ng-click = "options.' + value.moreImgAction + '(data, $index)" ';
+                                        }
+                                        td += ' >';
+                                    }
+
+                                } else if (angular.isDefined(value.checkbox) && value.checkbox && angular.isDefined(value.showHideFn)) {
+                                    td += '<input type="checkbox" ng-model="data.' + value.dataField + '" ng-change="options.Change(data)" ng-show="options.' + value.showHideFn + '(data, $index)">';
+                                    td += '</td>'
+                                }
+                                else if (angular.isDefined(value.checkbox) && value.checkbox) {
+                                    td += '<input type="checkbox" ng-model="data.' + value.dataField + '" ng-change="options.Change(data)">';
+                                    td += '</td>'
+                                } else if (angular.isDefined(value.radioChk) && value.radioChk && angular.isDefined(value.showHideFn)) {
+                                    td += '<input class="radio" type="radio" name="select" ng-model="data.' + value.dataField + '" ng-click="options.Change(data, $index)" ng-value="data" ng-hide="options.' + value.showHideFn + '(data, $index)">';
+                                    td += '</td>'
+                                }
+                                else if (angular.isDefined(value.radioChk) && value.radioChk) {
+                                    td += '<input class="radio" type="radio" name="select" ng-model="data.' + value.dataField + '" ng-change="options.Change(data, $index)" ng-value="data">';
+                                    td += '</td>'
+                                }
+                                else {
+                                    td += '{{data.' + value.dataField;
+                                    if (angular.isDefined(value.filter)) {
+                                        td += '|' + value.filter;
+                                    }
+                                    td += '}}';
+                                    if (angular.isDefined(value.isHtml) && value.isHtml) {
+                                        td += '\'">';
+                                    }
+                                }
+                                td += '</td>';
+                                tdArray.push(td);
+                            }
+                            if (angular.isDefined(value.actions)) {
+                                var td = '';
+                                td += '<td class="' + visibleCol + ' actionsTd" >';
+                                td += '<div class="btn-group">';
+                                angular.forEach(value.actions, function (action, actionIndex) {
+                                    var visibleBtn = '';
+                                    if (angular.isDefined(action.visibleBtn)) {
+                                        visibleBtn = action.visibleBtn;
+                                    }
+                                    var btnclass = "btn-default ";
+                                    if (angular.isDefined(action.btnClass)) {
+                                        btnclass = " btn-primary "
+                                    }
+                                    btnclass = btnclass + visibleBtn;
+                                    if (angular.isDefined(action.preicon) || angular.isDefined(action.posticon)) {
+
+                                        if (angular.isDefined(action.showHideFn) && angular.isDefined(action.disabledFn)) {
+                                            td += '<button type="button" class="btn btn-sm ' + btnclass + '" ng-show="options.' + action.showHideFn + '(data, $index, \'' + action.action + '\')" ng-disabled="options.' + action.disabledFn + '(data, $index, \'' + action.action + '\')" ng-click="options.' + action.action + '(data, $index)" ';
+                                        } else if (angular.isDefined(action.showHideFn)) {
+                                            td += '<button type="button" class="btn btn-sm ' + btnclass + '" ng-show="options.' + action.showHideFn + '(data, $index, \'' + action.action + '\')" ng-click="options.' + action.action + '(data, $index)" ';
+                                        } else if (angular.isDefined(action.disabledFn)) {
+                                            td += '<button type="button" class="btn btn-sm ' + btnclass + '" ng-disabled="options.' + action.disabledFn + '(data, $index, \'' + action.action + '\')" ng-click="options.' + action.action + '(data, $index)" ';
+                                        } else {
+                                            td += '<button type="button" class="btn btn-sm ' + btnclass + '" ng-click="options.' + action.action + '(data, $index)" ';
+                                        }
+
+                                    } else {
+                                        if (angular.isDefined(action.showHideFn) && angular.isDefined(action.disabledFn)) {
+                                            td += '<button type="button" class="btn btn-default" ng-show="options.' + action.showHideFn + '(data, $index)" ng-disabled="options.' + action.disabledFn + '(data, $index)" ng-click="options.' + action.action + '(data, $index)" ';
+                                        } else if (angular.isDefined(action.showHideFn)) {
+                                            td += '<button type="button" class="btn btn-default" ng-show="options.' + action.showHideFn + '(data, $index)" ng-click="options.' + action.action + '(data, $index)" ';
+                                        } else if (angular.isDefined(action.disabledFn)) {
+                                            td += '<button type="button" class="btn btn-default" ng-show="options.' + action.showHideFn + '(data, $index)" ng-disabled="options.' + action.disabledFn + '(data, $index)" ng-click="options.' + action.action + '(data, $index)" ';
+                                        } else {
+                                            td += '<button type="button" class="btn btn-default" ng-click="options.' + action.action + '(data, $index)" ';
+                                        }
+                                    }
+                                    if (angular.isDefined(action.toolTip)) {
+                                        td += 'tooltip="' + action.toolTip + '"';
+                                    }
+                                    td += '>';
+                                    if (angular.isDefined(action.preicon)) {
+                                        td += '<i class="' + action.preicon + '"></i> '
+                                    }
+
+                                    if (angular.isDefined(action.name)) {
+                                        td += action.name;
+                                    }
+
+                                    if (angular.isDefined(action.posticon)) {
+                                        td += ' <i class="' + action.posticon + '"></i>'
+                                    }
+                                    td += '</button>';
+                                });
+                                td += '</div>';
+                                td += '</td>';
+                                tdArray.push(td);
+                            }
+
+                            th += '</th>';
+
+                        });
+                        thead += th;
+                        thead += "</tr>";
+                        thSearch += "</tr>";
+                        if (angular.isDefined(scope.options.noSearchTable) && scope.options.noSearchTable) {
+                            thSearch = '';
+                        }
+                        var err_html = '<tr ng-if="options.datamodel.total == 0" ><td colspan="' + tdArray.length + '">';
+                        err_html += '<div role="alert"><span aria-hidden="true"></span> No records</div>';
+                        err_html += '</td></tr>';
+                        tdArray.push(err_html);
+                    });
+
+                    tbody = tdArray.join("");
+                    var refreshbutton = '';
+                    var pagination = '';
+                    if (angular.isUndefined(scope.options.extpaging)) {
+                        scope.Math = Math;
+                        pagination += '<div class="col-sm-5"><div class="dataTables_info" ng-hide="options.datamodel.total < limit" id="example_info" role="status" aria-live="polite">Showing {{options.datamodel.total>0 ? start+1 : start}} to {{start+options.datamodel.current}} of {{0+options.datamodel.total}} entries</div></div>';
+                        pagination += '<div class="col-sm-7"> <div class="dataTables_paginate paging_simple_numbers pull-right" id="example_paginate">';
+                        pagination += '<ul class="pagination noMargin">';
+                        pagination += '<li id="example_previous" class="paginate_button previous {{limit > options.datamodel.total || start == 0 ? \'disabled\':\'\'}}" ng-disabled="limit > options.datamodel.total || start == 0"><a tabindex="0" data-dt-idx="0" aria-controls="example" ng-click="firstPage()"><i class="fa fa-angle-double-left"></i></a></li>';
+                        pagination += '<li id="example_previous" class="paginate_button previous {{limit > options.datamodel.total || start == 0 ? \'disabled\':\'\'}}"><a tabindex="0" data-dt-idx="0" aria-controls="example" ng-click="prevPage()"><i class="fa fa-angle-left"></i></a></li>';
+
+                        pagination += '<li ng-repeat="pageNumber in pages = getPageArray(options.datamodel.total, (options.datamodel.current+start)) track by $index" ng-class="{ active : (Math.ceil((start+options.datamodel.current)/limit)) == pageNumber, disabled : pageNumber == \'...\' }"><a href="" ng-click="currPage(pageNumber)">{{ pageNumber }}</a></li>';
+
+                        pagination += '<li id="example_next" class="paginate_button next {{options.datamodel.current+start >= options.datamodel.total ? \'disabled\':\'\'}}"><a tabindex="0" data-dt-idx="7" aria-controls="example" ng-click="nextPage()"><i class="fa fa-angle-right"></i></a></li>';
+                        pagination += '<li id="example_next" class="paginate_button next {{options.datamodel.current+start >= options.datamodel.total ? \'disabled\':\'\'}}"><a tabindex="0" data-dt-idx="7" aria-controls="example" ng-click="lastPage()"><i class="fa fa-angle-double-right"></i></a></li>';
+                        pagination += '</ul></div>';
+                        pagination += '<div class="dataTables_length pull-right" id="example_length">';
+                        pagination += '<span  ng-hide="options.datamodel.total < limit">Show <select class="form-control input-sm" ng-hide="options.datamodel.total < limit" ng-options="val as val for val in displayCount" ng-change="changePageLimit(limit)" ng-model="limit"></select> &nbsp;entries &nbsp;</span>';
+                        pagination += '</div></div>';
+                        refreshbutton += '<div id="example_length" class="dataTables_filter">&nbsp;<button ng-click="doQuery()" class="btn btn-small" tooltip="Refresh" tooltip-trigger="mouseenter"><i class="fa fa-refresh fa-lg"></i></button></div>';
+                    }
+
+                    var html = '';
+                    html += '<div class="row"><div class="col-sm-12 col-md-12 col-lg-12"><div class="table-responsive">';
+                    html += refreshbutton;
+                    html += '<table class="table table-hover table-bordered dataTable no-footer">';
+                    html += '    <thead>';
+                    html += thead;
+                    html += thSearch;
+                    html += '    </thead>';
+                    html += '    <tbody>';
+                    html += '      <tr ng-click="onRowSelect(data)" ng-repeat="data in options.datamodel.data"' +
+                        ' ng-class-even="\'cwRowAlt\'" style="' + rowStyle + '" class="' + isCenter + '">';
+                    html += tbody;
+                    html += '      </tr>';
+                    html += '    </tbody>';
+                    html += '  </table></div></div></div>';
+                    html += '<div class="row">';
+                    html += pagination;
+                    html += '</div>';
+                    element.html(html);
+                    $compile(element.contents())(scope);
+                };
+
+                scope.getPageArray = function (totalRec, currentRec) {
+                    var pages = [];
+                    var totalPages = Math.ceil(totalRec / scope.limit);
+                    var halfWay = Math.ceil(scope.paginationRange / 2);
+                    var position;
+                    var currentPage = (Math.ceil(currentRec / scope.limit));
+
+                    if (currentPage <= halfWay) {
+                        position = 'start';
+                    } else if (totalPages - halfWay < currentPage) {
+                        position = 'end';
+                    } else {
+                        position = 'middle';
+                    }
+                    var ellipsesNeeded = scope.paginationRange < totalPages;
+                    var i = 1;
+                    while (i <= totalPages && i <= scope.paginationRange) {
+                        var pageNumber = scope.calculatePageNumber(i, currentPage, scope.paginationRange, totalPages);
+                        var openingEllipsesNeeded = (i === 2 && (position === 'middle' || position === 'end'));
+                        var closingEllipsesNeeded = (i === scope.paginationRange - 1 && (position === 'middle' || position === 'start'));
+                        if (ellipsesNeeded && (openingEllipsesNeeded || closingEllipsesNeeded)) {
+                            pages.push('...');
+                        } else {
+                            pages.push(pageNumber);
+                        }
+                        i++;
+                    }
+                    return pages;
+                };
+
+                scope.calculatePageNumber = function (i, currentPage, paginationRange, totalPages) {
+                    var halfWay = Math.ceil(paginationRange / 2);
+                    if (i === paginationRange) {
+                        return totalPages;
+                    } else if (i === 1) {
+                        return i;
+                    } else if (paginationRange < totalPages) {
+                        if (totalPages - halfWay < currentPage) {
+                            return totalPages - paginationRange + i;
+                        } else if (halfWay < currentPage) {
+                            return currentPage - halfWay + i;
+                        } else {
+                            return i;
+                        }
+                    } else {
+                        return i;
+                    }
+                };
+
+                scope.doQuery = function () {
+
+                    var queryParams = {};
+                    if (angular.isDefined(scope.options.isLoading)) {
+                        $rootScope.openModalPopupOpen();
+                    }
+
+                    if (angular.isDefined(scope.options.isTableSorting)) {
+                        var c = {};
+                        c[scope.options.isTableSorting] = 1;
+                        if (angular.isDefined(scope.options.perColConditions)) {
+                            queryParams = {
+                                skip: scope.start,
+                                limit: scope.limit,
+                                perColConditions: scope.options.perColConditions,
+                                orderBy: [c]
+                            };
+                        } else {
+                            queryParams = {
+                                skip: scope.start,
+                                limit: scope.limit,
+                                orderBy: [c]
+                            };
+                        }
+                    } else if (angular.isDefined(scope.options.perColConditions)) {
+                        queryParams = {
+                            skip: scope.start,
+                            limit: scope.limit,
+                            perColConditions: scope.options.perColConditions
+                        };
+                    } else {
+                        queryParams = {
+                            skip: scope.start,
+                            limit: scope.limit
+                        };
+                    }
+
+                    //Figure out per column search or global search if any
+                    // * High priority to per column search
+                    // * Low for global search
+                    var globalSearchQuery = {};
+                    var perColSearchQuery = {};
+                    var hasPerColSearch = false;
+                    if (scope.globalsearch.length > 0) {
+                        globalSearchQuery[scope.globalsearch] = [];
+                    }
+
+                    if (angular.isDefined(scope.options.searchFields)) {
+                        scope.searchFields = scope.options.searchFields;
+                    }
+                    angular.forEach(scope.searchFields, function (val, key) {
+                        val = val.replace(/\*/g, '%');
+                        if (val.length > 0) {
+                            hasPerColSearch = true;
+                            perColSearchQuery[key] = val;
+                        } else {
+                            if (angular.isDefined(queryParams.perColConditions)) {
+                                delete queryParams.perColConditions[key];
+                            }
+                        }
+                        if (scope.globalsearch.length > 0) {
+                            globalSearchQuery[scope.globalsearch].push(key);
+                        }
+                    });
+
+                    //High priority to per column search
+                    //Low for global search
+                    if (hasPerColSearch) {
+                        if (angular.isDefined(scope.options.perColConditions)) {
+                            for (var attrname in perColSearchQuery) {
+                                queryParams.perColConditions[attrname] = perColSearchQuery[attrname];
+                            }
+                            //queryParams.perColConditions = scope.options.perColConditions.merge(perColSearchQuery);
+                        } else {
+                            queryParams.perColConditions = perColSearchQuery;
+                        }
+                    } else if (scope.globalsearch.length > 0) {
+                        queryParams.globalConditions = globalSearchQuery;
+                    }
+
+                    if (scope.sort.length > 0) {
+                        queryParams.orderBy = [];
+                        k = {};
+                        k[scope.sort] = scope.sortDirection;
+                        queryParams.orderBy.push(k);
+                    }
+                    if (scope.sortName.length > 0) {
+                        queryParams.order = '';
+                        k = '';
+                        k = scope.sortNameDirection;
+                        if (k == 1) {
+                            k = true;
+                        } else {
+                            k = false;
+                        }
+                        queryParams.order = k;
+                        queryParams.queryField = scope.sortName;
+                    }
+
+                    scope.drowUi();
+                    if (angular.isDefined(scope.options.query) && angular.isFunction(scope.options.query)) {
+                        scope.options.query(queryParams);
+                        $timeout(function () {
+                            if (angular.isDefined(scope.options.isLoading)) {
+                                $rootScope.openModalPopupClose();
+                            }
+                        }, 500);
+                    } else if (angular.isDefined(scope.options.service)) {
+                        if (angular.isDefined(scope.options.dataClear) && angular.isDefined(scope.options.datamodel)) {
+                            scope.options.dataClear(scope.options.datamodel);
+                        }
+                        //Start Loading image
+                        $rootScope.openModalPopupOpen();
+                        if (angular.isDefined(scope.options.dynamicService) && scope.options.dynamicService) {
+                            scope.options.service.getConfiguredMembers("dummy",
+                                queryParams,
+                                function (data) {
+                                    if (angular.isDefined($rootScope.queues)) {
+                                        scope.queues = $rootScope.queues;
+                                    }
+                                    if (angular.isDefined($rootScope.queuesTest)) {
+                                        scope.queuesTest = $rootScope.queuesTest;
+                                    }
+
+                                    if (angular.isDefined($rootScope.getRoles)) {
+                                        scope.getRoles = $rootScope.getRoles;
+                                    }
+                                    if (angular.isDefined($rootScope.chatcount)) {
+                                        scope.chatcount = $rootScope.chatcount;
+                                    }
+                                    $rootScope.openModalPopupClose();
+                                    scope.options.datamodel = data;
+                                    if (angular.isDefined(scope.options.isLoading)) {
+                                        $rootScope.openModalPopupClose();
+                                    }
+                                    if (angular.isDefined(scope.options.dataInit)) {
+                                        scope.options.dataInit(data);
+                                    }
+                                    if (angular.isDefined(scope.options.datamodel) && angular.isDefined(scope.options.datamodel.total)) {
+                                        scope.options.extPagingShow = true;
+                                        if (scope.options.datamodel.total == 0) {
+                                            scope.options.pagingText = (scope.start + 0) + " to " + (scope.start + scope.options.datamodel.current) + " of " + scope.options.datamodel.total;
+                                            if ((scope.start + scope.options.datamodel.current) >= 10) {
+                                                scope.options.isFwdArrowEnable = true;
+                                            } else {
+                                                scope.options.isFwdArrowEnable = false;
+                                            }
+                                            scope.options.OperpagingText = (scope.start + 0) + " to " + (scope.start + scope.options.datamodel.current);
+                                        } else {
+                                            scope.options.pagingText = (scope.start + 1) + " to " + (scope.start + scope.options.datamodel.current) + " of " + scope.options.datamodel.total;
+                                            if (scope.start != 0) {
+                                                scope.options.isBackArrowEnable = true;
+                                            } else {
+                                                scope.options.isBackArrowEnable = false;
+                                            }
+                                            if ((scope.start + scope.options.datamodel.current) >= 10) {
+                                                scope.options.isFwdArrowEnable = true;
+                                            } else {
+                                                scope.options.isFwdArrowEnable = false;
+                                            }
+                                            scope.options.OperpagingText = (scope.start + 1) + " to " + (scope.start + scope.options.datamodel.current);
+                                        }
+                                    }
+                                });
+
+                        } else {
+                            scope.options.service.get(undefined, {query: queryParams}, function (data) {
+                                if (angular.isDefined($rootScope.queues)) {
+                                    scope.queues = $rootScope.queues;
+                                }
+                                if (angular.isDefined($rootScope.queuesTest)) {
+                                    scope.queuesTest = $rootScope.queuesTest;
+                                }
+
+                                if (angular.isDefined($rootScope.getRoles)) {
+                                    scope.getRoles = $rootScope.getRoles;
+                                }
+                                if (angular.isDefined($rootScope.chatcount)) {
+                                    scope.chatcount = $rootScope.chatcount;
+                                }
+                                scope.options.datamodel = data;
+                                if (angular.isDefined(scope.options.dataInit)) {
+                                    scope.options.dataInit(data);
+                                }
+                                if (angular.isDefined(scope.options.datamodel) && angular.isDefined(scope.options.datamodel.total)) {
+                                    scope.options.extPagingShow = true;
+                                    if (scope.options.datamodel.total == 0) {
+                                        scope.options.pagingText = (scope.start + 0) + " to " + (scope.start + scope.options.datamodel.current) + " of " + scope.options.datamodel.total;
+                                        if ((scope.start + scope.options.datamodel.current) >= 10) {
+                                            scope.options.isFwdArrowEnable = true;
+                                        } else {
+                                            scope.options.isFwdArrowEnable = false;
+                                        }
+                                        scope.options.OperpagingText = (scope.start + 0) + " to " + (scope.start + scope.options.datamodel.current);
+                                    } else {
+                                        scope.options.pagingText = (scope.start + 1) + " to " + (scope.start + scope.options.datamodel.current) + " of " + scope.options.datamodel.total;
+                                        if (scope.start != 0) {
+                                            scope.options.isBackArrowEnable = true;
+                                        } else {
+                                            scope.options.isBackArrowEnable = false;
+                                        }
+                                        if ((scope.start + scope.options.datamodel.current) >= 10) {
+                                            scope.options.isFwdArrowEnable = true;
+                                        } else {
+                                            scope.options.isFwdArrowEnable = false;
+                                        }
+                                        scope.options.OperpagingText = (scope.start + 1) + " to " + (scope.start + scope.options.datamodel.current);
+                                    }
+                                }
+                                $rootScope.openModalPopupClose();
+                                if (angular.isDefined(scope.options.isLoading)) {
+                                    $rootScope.openModalPopupClose();
+                                }
+
+                            });
+                        }
+                    } else {
+                        // alert("No query func");
+                    }
+                };
+
+                scope.doSearch = function (event) {
+                    //if(scope.queryoptions.search.length>3 || scope.queryoptions.search.length === 0)
+                    {
+                        scope.start = 0;
+                        if (event.keyCode === 13) {
+                            scope.doQuery();
+                        }
+                    }
+                };
+
+                scope.pageSizeChange = function (value) {
+                    scope.start = 0;
+                    scope.doQuery();
+                };
+
+                scope.changePageLimit = function (value) {
+                    scope.start = 0;
+                    scope.limit = value;
+                };
+
+                scope.pageLimitChange = function (value) {
+                    scope.start = 0;
+                    scope.limit = value;
+                    scope.doQuery();
+                };
+
+                scope.sortChange = function (name) {
+                    if (name === scope.sort) {
+                        scope.sortDirection *= -1;
+                    } else {
+                        scope.sortDirection = 1;
+                    }
+                    scope.sort = name;
+
+                    scope.doQuery();
+                };
+
+                scope.sortSchedulerList = function (name) {
+                    if (name === scope.sortName) {
+                        scope.sortNameDirection *= -1;
+                    } else {
+                        scope.sortNameDirection = 1;
+                    }
+                    scope.sortName = name;
+                    scope.doQuery();
+                };
+
+                scope.sortManualChange = function (name) {
+                    scope.manulasort = !scope.manulasort;
+                    var orderByField = name;
+                    if (!angular.isDefined(name)) {
+                        orderByField = '-presence';
+                    }
+                    scope.options.datamodel.data = $filter('orderBy')(scope.options.datamodel.data, orderByField, scope.manulasort);
+                };
+
+                scope.currPage = function (pageNumber) {
+                    var numberRegex = /^\d+$/;
+                    var currentRec = (scope.options.datamodel.current + scope.start);
+                    var currentPage = (Math.ceil(currentRec / scope.limit));
+                    if (numberRegex.test(pageNumber) && currentPage != pageNumber) {
+                        scope.options.SelectedId = [];
+                        if (angular.isDefined(scope.options.Change)) {
+                            scope.options.Change({'data': {'SelectedOperator': false}});
+                        }
+
+                        pageNumber = parseInt(pageNumber) - 1;
+                        scope.start = (pageNumber * scope.limit);
+                        scope.doQuery();
+                    }
+                };
+
+                scope.nextPage = function () {
+                    if (scope.start + scope.options.datamodel.current < scope.options.datamodel.total) {
+                        scope.start += scope.limit;
+                        scope.doQuery();
+                    }
+                };
+
+                scope.prevPage = function () {
+                    if (scope.start >= scope.limit) {
+                        scope.start -= scope.limit;
+                        scope.doQuery();
+                    }
+                };
+
+                scope.firstPage = function () {
+                    if (scope.start !== 0) {
+                        scope.start = 0;
+                        scope.doQuery();
+                    }
+                };
+
+                scope.lastPage = function () {
+                    var lastPageStart = 0;
+                    if (scope.options.datamodel.total % scope.limit === 0) {
+                        lastPageStart = ((scope.options.datamodel.total / scope.limit) - 1) * scope.limit;
+                    } else {
+                        lastPageStart = scope.limit * Math.floor(scope.options.datamodel.total / scope.limit);
+                    }
+
+                    if (scope.start !== lastPageStart) {
+                        scope.start = lastPageStart;
+                        scope.doQuery();
+                    }
+
+                };
+                if (angular.isDefined(scope.options.init)) {
+                    if (scope.options.init == true) {
+                        scope.doQuery();
+                    }
+                } else {
+//                    scope.doQuery();
+                }
+
+                scope.$watch('options.reQuery', function (newValue) {
+                    if (newValue == true) {
+                        scope.doQuery();
+                        scope.options.reQuery = false;
+                    }
+                });
+
+                scope.$watch('limit', function (value) {
+                    scope.pageLimitChange(value);
+                }, true);
+                scope.onRowSelect = function (row) {
+                    if (angular.isDefined(scope.options.onRowSelect) && angular.isFunction(scope.options.onRowSelect)) {
+                        scope.options.onRowSelect(row);
+                    }
+
+                };
+                scope.displayCount = [10, 20];
+
+                //Build table header (row above table)
+                var hasAddOption = false;
+                if (angular.isDefined(scope.options.addAction) && angular.isFunction(scope.options.addAction)) {
+                    hasAddOption = true;
+                }
+                scope.drowUi();
+            }
+        };
+    }]);
+app.directive('focusMe', function ($timeout) {
+    return function (scope, element, attrs) {
+        scope.$watch(attrs.focusMe, function (value) {
+            if (value) {
+                $timeout(function () {
+                    element.focus();
+                }, 100);
+            }
+        });
+    };
+});
+app.directive('validNumber', function () {
+    return {
+        require: '?ngModel',
+        link: function (scope, element, attrs, ngModelCtrl) {
+            if (!ngModelCtrl) {
+                return;
+            }
+
+            ngModelCtrl.$parsers.push(function (val) {
+                if (angular.isUndefined(val)) {
+                    var val = '';
+                }
+                var clean = val.replace(/[^0-9\.]/g, '');
+                var decimalCheck = clean.split('.');
+
+                if (!angular.isUndefined(decimalCheck[1])) {
+                    decimalCheck[1] = decimalCheck[1].slice(0, 2);
+                    clean = decimalCheck[0] + '.' + decimalCheck[1];
+                }
+
+                if (val !== clean) {
+                    ngModelCtrl.$setViewValue(clean);
+                    ngModelCtrl.$render();
+                }
+                return clean;
+            });
+
+            element.bind('keypress', function (event) {
+                if (event.keyCode === 32) {
+                    event.preventDefault();
+                }
+            });
+        }
+    };
+});
+app.directive('numbersOnly', function () {
+    return {
+        require: 'ngModel',
+        link: function (scope, element, attrs, modelCtrl) {
+            modelCtrl.$parsers.push(function (inputValue) {
+                // this next if is necessary for when using ng-required on your input.
+                // In such cases, when a letter is typed first, this parser will be called
+                // again, and the 2nd time, the value will be undefined
+                if (inputValue == undefined) return ''
+                var transformedInput = inputValue.replace(/[^0-9]/g, '');
+                if (transformedInput != inputValue) {
+                    modelCtrl.$setViewValue(transformedInput);
+                    modelCtrl.$render();
+                }
+
+                return transformedInput;
+            });
+        }
+    };
+});
+app.directive('myMaxlength', ['$compile', '$log', function ($compile, $log) {
+    return {
+        restrict: 'A',
+        require: 'ngModel',
+        link: function (scope, elem, attrs, ctrl) {
+            attrs.$set("ngTrim", "false");
+            var maxlength = parseInt(attrs.myMaxlength, 10);
+            ctrl.$parsers.push(function (value) {
+                $log.info("In parser function value = [" + value + "].");
+                if (value == undefined) return '';
+                value = value + "";
+                if (value.length > maxlength) {
+                    $log.info("The value [" + value + "] is too long!");
+                    value = value.substr(0, maxlength);
+                    ctrl.$setViewValue(value);
+                    ctrl.$render();
+                    $log.info("The value is now truncated as [" + value + "].");
+                }
+                return value;
+            });
+        }
+    };
+}]);
+app.directive('ngMin', function () {
+    return {
+        restrict: 'A',
+        require: 'ngModel',
+        link: function (scope, elem, attr, ctrl) {
+            scope.$watch(attr.ngMin, function () {
+                ctrl.$setViewValue(ctrl.$viewValue);
+            });
+            var minValidator = function (value) {
+                var min = scope.$eval(attr.ngMin) || 0;
+                if (value == undefined) return '';
+                if (value && value < min) {
+                    ctrl.$setViewValue(min);
+                    ctrl.$render();
+                } else {
+                    ctrl.$setValidity('ngMin', true);
+                    return value;
+                }
+            };
+
+            ctrl.$parsers.push(minValidator);
+            ctrl.$formatters.push(minValidator);
+        }
+    };
+});
+app.directive('ngMax', function () {
+    return {
+        restrict: 'A',
+        require: 'ngModel',
+        link: function (scope, elem, attr, ctrl) {
+            scope.$watch(attr.ngMax, function () {
+                ctrl.$setViewValue(ctrl.$viewValue);
+            });
+            var maxValidator = function (value) {
+                var max = scope.$eval(attr.ngMax) || Infinity;
+                if (value == undefined) return '';
+                if (value && value > max) {
+                    ctrl.$setViewValue(max);
+                    ctrl.$render();
+                } else {
+                    ctrl.$setValidity('ngMax', true);
+                    return value;
+                }
+            };
+
+            ctrl.$parsers.push(maxValidator);
+            ctrl.$formatters.push(maxValidator);
+        }
+    };
+});
+app.directive('dynamicCtrl', ['$compile', '$parse', function ($compile, $parse) {
+    return {
+        restrict: 'A',
+        terminal: true,
+        priority: 100000,
+        link: function (scope, elem) {
+            var name = $parse(elem.attr('dynamic-ctrl'))(scope);
+            elem.removeAttr('dynamic-ctrl');
+            elem.attr('ng-controller', name);
+            $compile(elem)(scope);
+        }
+    };
+}]);
+app.directive('uiWizardForm', ['$compile', function ($compile) {
+    return {
+        link: function (scope, ele) {
+            ele.wrapInner('<div class="steps-wrapper">')
+            steps = ele.children('.steps-wrapper').steps()
+            $compile(steps)(scope)
+        }
+    }
+}]);
+app.directive('customPopoverGridCompute', function () {
+    return {
+        restrict: 'A',
+        template: '',
+        link: function (scope, el, attrs) {
+            scope.label = attrs.popoverLabel;
+            $(el).each(function () {
+                var $elem = $(this);
+                $elem.popover({
+                    trigger: 'hover',
+                    html: true,
+                    content: attrs.popoverHtml,
+                    placement: attrs.popoverPlacement,
+                    title: attrs.popoverTitle,
+                    animation: true,
+                    container: $elem
+                });
+            });
+        }
+    };
+});
+app.directive('ionslider', function ($timeout) {
+    return {
+        restrict: 'E',
+        scope: {
+            min: '=',
+            max: '=',
+            type: '@',
+            prefix: '@',
+            maxPostfix: '@',
+            prettify: '@',
+            grid: '@',
+            gridMargin: '@',
+            postfix: '@',
+            step: '@',
+            hideMinMax: '@',
+            hideFromTo: '@',
+            from: '=',
+            to: "=",
+            values: "=",
+            disable: '=',
+            onChange: '=',
+            onFinish: '&'
+
+        },
+        template: '<div></div>',
+        replace: true,
+        link: function ($scope, $element, attrs) {
+            (function init() {
+                $($element).ionRangeSlider({
+                    min: $scope.min,
+                    max: $scope.max,
+                    type: $scope.type,
+                    prefix: $scope.prefix,
+                    maxPostfix: $scope.maxPostfix,
+                    prettify: $scope.prettify,
+                    grid: $scope.grid,
+                    gridMargin: $scope.gridMargin,
+                    postfix: $scope.postfix,
+                    step: $scope.step,
+                    hideMinMax: $scope.hideMinMax,
+                    hideFromTo: $scope.hideFromTo,
+                    from: $scope.from,
+                    to: $scope.to,
+                    values: $scope.values,
+                    disable: $scope.disable,
+                    onChange: $scope.onChange,
+                    onFinish: function (a) {
+                        $scope.$apply(function () {
+                            $scope.from = a.from;
+                            $scope.to = a.to;
+                        });
+                    }
+                });
+            })();
+            $scope.$watch('min', function (value) {
+                $timeout(function () {
+                    $($element).data("ionRangeSlider").update({min: value});
+                });
+            }, true);
+            $scope.$watch('max', function (value) {
+                $timeout(function () {
+                    $($element).data("ionRangeSlider").update({max: value});
+                });
+            });
+            $scope.$watch('from', function (value) {
+                $timeout(function () {
+                    $($element).data("ionRangeSlider").update({from: value});
+                });
+            });
+            $scope.$watch('to', function (value) {
+                $timeout(function () {
+                    $($element).data("ionRangeSlider").update({to: value});
+                });
+            });
+            $scope.$watch('disable', function (value) {
+                $timeout(function () {
+                    $($element).data("ionRangeSlider").update({disable: value});
+                });
+            });
+        }
+    }
+});
+
+app.directive('fileModel', function ($parse) {
+    return {
+        restrict: 'A', //the directive can be used as an attribute only
+
+        /*
+         link is a function that defines functionality of directive
+         scope: scope associated with the element
+         element: element on which this directive used
+         attrs: key value pair of element attributes
+         */
+        link: function (scope, element, attrs) {
+            var model = $parse(attrs.fileModel),
+                modelSetter = model.assign; //define a setter for demoFileModel
+
+            //Bind change event on the element
+            element.bind('change', function () {
+                //Call apply on scope, it checks for value changes and reflect them on UI
+                scope.$apply(function () {
+                    //set the model value
+                    modelSetter(scope, element[0].files[0]);
+                });
+            });
+        }
+    };
+});

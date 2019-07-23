@@ -1,0 +1,39 @@
+<div class="modal-header">
+    <h4 class="card-title">{{resources.sourceMetaInfo}}</h4>
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">×</button>
+</div>
+<div class="modal-body">
+    <div class="row mx-auto">
+        <table class="table table-responsive">
+            <thead>
+            <tr>
+                <th>{{resources.source}}</th>
+                <th>{{resources.incrementLoader}}</th>
+                <th>{{resources.disableCarryForward}}</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="(key,val) in variable">
+                <td>
+                    {{key}}
+                </td>
+
+                <td style="padding-left: 55px;">
+                    <input type="checkbox" id="incrementLoader+{{key}}" ng-model="val.incrementLoader">
+                    <label for="incrementLoader+{{key}}" class="mx-auto"></label>
+                </td>
+
+                <td style="padding-left: 65px;">
+                    <input type="checkbox" id="disableCarryForward+{{key}}" ng-model="val.disableCarryForward">
+                    <label for="disableCarryForward+{{key}}"></label>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" ng-click="cancel()" data-dismiss="modal" title="Cancel">No</button>
+    <button type="button" class="btn btn-info" ng-click="submit(variable)" title="Save">Yes</button>
+</div>
+

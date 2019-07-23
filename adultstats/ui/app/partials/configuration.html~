@@ -1,0 +1,113 @@
+<div class="row" id='validation'>
+    <div class="col-12">
+        <div class="card wizard-content">
+            <div class="card-body">
+                <h4 class="card-title text-center f-w-6">Configure Recon</h4>
+                <form class="validation-wizard wizard-circle wizard clearfix" id="steps-uid-2">
+
+                    <!--steps list items at the top-->
+                    <div class="steps clearfix">
+                        <ul role="tablist">
+                            <li role="tab" class="first"
+                                ng-class="(present == 'defineSource')?'current':''||(active['defineSource'] == true)?'done':''">
+                                <a id="steps-uid-2-t-0" href="#" aria-controls="steps-uid-2-p-0">
+                                    <span class="current-info audible">current step: </span><span class="step">1</span>Define
+                                    Source
+                                </a>
+                            </li>
+
+                            <li role="tab" class="disabled"
+                                ng-class="(present == 'defineFilters')?'current':''||(active['defineFilters']== true)?'done':''">
+                                <a id="steps-uid-2-t-1" href="#" aria-controls="steps-uid-2-p-1">
+                                    <span class="step">2</span>Define Filters
+                                </a>
+                            </li>
+
+                            <li role="tab" class="disabled"
+                                ng-class="(present == 'selectMatchColumns')?'current':''||(active['selectMatchColumns']==true)?'done':''">
+                                <a id="steps-uid-2-t-4" href="#" aria-controls="steps-uid-2-p-2">
+                                    <span class="step">3</span>Select Match Columns
+                                </a>
+                            </li>
+
+                            <li role="tab" class="disabled"
+                                ng-class="(present == 'resultsOfProcess')?'current':''||(active['resultsOfProcess']==true)?'done':''">
+                                <a id="steps-uid-2-t-5" href="#" aria-controls="steps-uid-2-p-2">
+                                    <span class="step">4</span>Result of Process
+                                </a>
+                            </li>
+
+                            <li role="tab" class="disabled"
+                                ng-class="(present == 'saveProcess')?'current':''||(active['saveProcess']==true)?'done':''">
+                                <a id="steps-uid-2-t-6" href="#" aria-controls="steps-uid-2-p-2">
+                                    <span class="step">5</span>Save Process
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!--contents of each steps as defined in this sections-->
+                    <div class="content clearfix">
+
+                        <!-- Step 1 -->
+                        <h6 id="steps-uid-2-h-0" tabindex="-1" class="title current">Step 1</h6>
+                        <section id="steps-uid-2-p-0" role="tabpanel"
+                                 aria-labelledby="steps-uid-2-h-0"
+                                 class="">
+                            <div class="form-group row m-t-20">
+                                <label class="col-lg-2"><h4>Upload File</h4></label>
+                                <input class="form-control col-lg-4 m-r-10" type="file"
+                                       file-model="uploadFile" accept=".csv,.jpg,.png"/>
+                                <button class="btn btn-info" title="Upload" ng-click="uploadSourceFile()"><i
+                                        class="fa fa-upload"></i></button>
+                            </div>
+
+                            <div id="myGrid1" style="width: 100%; height: 500px;"
+                                 ag-grid="gridOptions"
+                                 class="ag-theme-fresh">
+                            </div>
+                        </section>
+
+
+                        <!-- Step 2 -->
+                        <h6 id="steps-uid-2-h-1" tabindex="-1" class="title">Step 2</h6>
+                        <section id="steps-uid-2-p-1" role="tabpanel" aria-labelledby="steps-uid-2-h-1" class="body"
+                                 ng-show="present == 'defineFilters'">
+                        </section>
+
+                        <!-- Step 3 -->
+                        <h6 id="steps-uid-2-h-2" tabindex="-1" class="title">Step 3</h6>
+                        <section id="steps-uid-2-p-2" role="tabpanel" aria-labelledby="steps-uid-2-h-2" class="body"
+                                 aria-hidden="true" ng-show="present == 'selectMatchColumns'">
+                        </section>
+
+                        <!--step 4-->
+                        <h6 id="steps-uid-2-h-2" tabindex="-1" class="title">Step 4</h6>
+                        <section id="steps-uid-2-p-3" role="tabpanel" aria-labelledby="steps-uid-2-h-2" class="body"
+                                 aria-hidden="true" ng-show="present=='resultsOfProcess'">
+                        </section>
+                    </div>
+
+                    <div class="row float-right m-r-20">
+                        <button class="btn btn-info m-r-5" ng-disabled="present == 'defineSource'"
+                                ng-click="previousStep(present)" role="menuitem">Previous
+                        </button>
+                        <button class="btn btn-info m-r-5" ng-click="nextStep(present)" ng-disabled="disableFlag"
+                                ng-show="present!='selectMatchColumns'">Next
+                        </button>
+                        <button class="btn btn-info m-r-5" ng-click="nextStep(present)" ng-disabled="disableFlag"
+                                ng-show="present =='selectMatchColumns'">Run
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="form-group">
+    <div id="sourceGrid" style="width: 100%; height: 300px;" ag-grid="sourceGridOptions"
+         class="ag-blue">
+    </div>
+
+</div>
